@@ -31,9 +31,7 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages>
-                <package>org.exbin.utils.defaultpopup</package>
-            </public-packages>
+            <public-packages/>
         </data>
     </configuration>
 </project>

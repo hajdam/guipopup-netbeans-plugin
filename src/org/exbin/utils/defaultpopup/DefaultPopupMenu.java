@@ -33,12 +33,12 @@ import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
-import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JViewport;
+import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.text.BadLocationException;
@@ -48,7 +48,7 @@ import javax.swing.text.JTextComponent;
 /**
  * Utilities for default menu generation.
  *
- * @version 0.1.0 2019/07/18
+ * @version 0.1.0 2019/07/19
  * @author ExBin Project (http://exbin.org)
  */
 public class DefaultPopupMenu {
@@ -268,10 +268,17 @@ public class DefaultPopupMenu {
 
         @Override
         protected void dispatchEvent(AWTEvent event) {
+            super.dispatchEvent(event);
+
             if (event.getID() == MouseEvent.MOUSE_RELEASED || event.getID() == MouseEvent.MOUSE_PRESSED) {
                 MouseEvent mouseEvent = (MouseEvent) event;
 
                 if (mouseEvent.isPopupTrigger()) {
+                    if (MenuSelectionManager.defaultManager().getSelectedPath().length > 0) {
+                        // Menu was already created
+                        return;
+                    }
+
                     Component component = getSource(mouseEvent);
                     if (component instanceof JViewport) {
                         component = ((JViewport) component).getView();
@@ -280,23 +287,25 @@ public class DefaultPopupMenu {
                     if (component instanceof JTextComponent) {
                         if (((JTextComponent) component).getComponentPopupMenu() == null) {
                             activateMousePopup(mouseEvent, component, new TextComponentClipboardHandler((JTextComponent) component));
-                            return;
                         }
                     } else if (component instanceof JList) {
                         if (((JList) component).getComponentPopupMenu() == null) {
                             activateMousePopup(mouseEvent, component, new ListClipboardHandler((JList) component));
-                            return;
                         }
                     } else if (component instanceof JTable) {
                         if (((JTable) component).getComponentPopupMenu() == null) {
                             activateMousePopup(mouseEvent, component, new TableClipboardHandler((JTable) component));
-                            return;
                         }
                     }
                 }
             } else if (event.getID() == KeyEvent.KEY_PRESSED) {
                 KeyEvent keyEvent = (KeyEvent) event;
                 if (keyEvent.getKeyCode() == KeyEvent.VK_CONTEXT_MENU || (keyEvent.getKeyCode() == KeyEvent.VK_F10 && keyEvent.isShiftDown())) {
+                    if (MenuSelectionManager.defaultManager().getSelectedPath().length > 0) {
+                        // Menu was already created
+                        return;
+                    }
+
                     Component component = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 
                     if (component instanceof JTextComponent) {
@@ -309,7 +318,6 @@ public class DefaultPopupMenu {
                                 point = null;
                             }
                             activateKeyPopup(component, point, new TextComponentClipboardHandler((JTextComponent) component));
-                            return;
                         }
                     } else if (component instanceof JList) {
                         if (((JList) component).getComponentPopupMenu() == null) {
@@ -320,7 +328,6 @@ public class DefaultPopupMenu {
                                 point = new Point(component.getWidth() / 2, cellBounds.y);
                             }
                             activateKeyPopup(component, point, new ListClipboardHandler((JList) component));
-                            return;
                         }
                     } else if (component instanceof JTable) {
                         if (((JTable) component).getComponentPopupMenu() == null) {
@@ -335,13 +342,10 @@ public class DefaultPopupMenu {
                                 point = new Point(cellBounds.x, cellBounds.y);
                             }
                             activateKeyPopup(component, point, new TableClipboardHandler((JTable) component));
-                            return;
                         }
                     }
                 }
             }
-
-            super.dispatchEvent(event);
         }
 
         private void activateMousePopup(MouseEvent mouseEvent, Component component, ClipboardActionsHandler clipboardHandler) {

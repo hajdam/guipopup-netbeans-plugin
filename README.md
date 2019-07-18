@@ -10,7 +10,7 @@ Published as: http://plugins.netbeans.org/plugin/xxxxxx/
 Screenshot
 ----------
 
-![BinEd-Editor Screenshot](images/screenshot.png?raw=true)
+![Plugin Screenshot](images/screenshot.png?raw=true)
 
 Features
 --------

@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: org.exbin.utils.defaultpopup
+OpenIDE-Module-Install: org/exbin/utils/defaultpopup/Installer.class
+OpenIDE-Module-Localizing-Bundle: org/exbin/utils/defaultpopup/Bundle.properties
+OpenIDE-Module-Specification-Version: 0.1.0
+

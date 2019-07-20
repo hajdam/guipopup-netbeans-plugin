@@ -285,17 +285,11 @@ public class DefaultPopupMenu {
                     }
 
                     if (component instanceof JTextComponent) {
-                        if (((JTextComponent) component).getComponentPopupMenu() == null) {
-                            activateMousePopup(mouseEvent, component, new TextComponentClipboardHandler((JTextComponent) component));
-                        }
+                        activateMousePopup(mouseEvent, component, new TextComponentClipboardHandler((JTextComponent) component));
                     } else if (component instanceof JList) {
-                        if (((JList) component).getComponentPopupMenu() == null) {
-                            activateMousePopup(mouseEvent, component, new ListClipboardHandler((JList) component));
-                        }
+                        activateMousePopup(mouseEvent, component, new ListClipboardHandler((JList) component));
                     } else if (component instanceof JTable) {
-                        if (((JTable) component).getComponentPopupMenu() == null) {
-                            activateMousePopup(mouseEvent, component, new TableClipboardHandler((JTable) component));
-                        }
+                        activateMousePopup(mouseEvent, component, new TableClipboardHandler((JTable) component));
                     }
                 }
             } else if (event.getID() == KeyEvent.KEY_PRESSED) {
@@ -309,40 +303,34 @@ public class DefaultPopupMenu {
                     Component component = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 
                     if (component instanceof JTextComponent) {
-                        if (((JTextComponent) component).getComponentPopupMenu() == null) {
-                            Point point;
-                            try {
-                                Rectangle relativeRect = ((JTextComponent) component).modelToView(((JTextComponent) component).getCaretPosition());
-                                point = relativeRect == null ? null : new Point(relativeRect.x + relativeRect.width, relativeRect.y + relativeRect.height);
-                            } catch (BadLocationException ex) {
-                                point = null;
-                            }
-                            activateKeyPopup(component, point, new TextComponentClipboardHandler((JTextComponent) component));
+                        Point point;
+                        try {
+                            Rectangle relativeRect = ((JTextComponent) component).modelToView(((JTextComponent) component).getCaretPosition());
+                            point = relativeRect == null ? null : new Point(relativeRect.x + relativeRect.width, relativeRect.y + relativeRect.height);
+                        } catch (BadLocationException ex) {
+                            point = null;
                         }
+                        activateKeyPopup(component, point, new TextComponentClipboardHandler((JTextComponent) component));
                     } else if (component instanceof JList) {
-                        if (((JList) component).getComponentPopupMenu() == null) {
-                            Point point = null;
-                            int selectedIndex = ((JList) component).getSelectedIndex();
-                            if (selectedIndex >= 0) {
-                                Rectangle cellBounds = ((JList) component).getCellBounds(selectedIndex, selectedIndex);
-                                point = new Point(component.getWidth() / 2, cellBounds.y);
-                            }
-                            activateKeyPopup(component, point, new ListClipboardHandler((JList) component));
+                        Point point = null;
+                        int selectedIndex = ((JList) component).getSelectedIndex();
+                        if (selectedIndex >= 0) {
+                            Rectangle cellBounds = ((JList) component).getCellBounds(selectedIndex, selectedIndex);
+                            point = new Point(component.getWidth() / 2, cellBounds.y);
                         }
+                        activateKeyPopup(component, point, new ListClipboardHandler((JList) component));
                     } else if (component instanceof JTable) {
-                        if (((JTable) component).getComponentPopupMenu() == null) {
-                            Point point = null;
-                            int selectedRow = ((JTable) component).getSelectedRow();
-                            if (selectedRow >= 0) {
-                                int selectedColumn = ((JTable) component).getSelectedColumn();
-                                if (selectedColumn < -1) {
-                                    selectedColumn = 0;
-                                }
-                                Rectangle cellBounds = ((JTable) component).getCellRect(selectedRow, selectedColumn, false);
-                                point = new Point(cellBounds.x, cellBounds.y);
+                        Point point = null;
+                        int selectedRow = ((JTable) component).getSelectedRow();
+                        if (selectedRow >= 0) {
+                            int selectedColumn = ((JTable) component).getSelectedColumn();
+                            if (selectedColumn < -1) {
+                                selectedColumn = 0;
                             }
-                            activateKeyPopup(component, point, new TableClipboardHandler((JTable) component));
+                            Rectangle cellBounds = ((JTable) component).getCellRect(selectedRow, selectedColumn, false);
+                            point = new Point(cellBounds.x, cellBounds.y);
                         }
+                        activateKeyPopup(component, point, new TableClipboardHandler((JTable) component));
                     }
                 }
             }

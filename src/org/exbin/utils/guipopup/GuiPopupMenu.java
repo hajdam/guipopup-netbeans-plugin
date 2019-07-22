@@ -19,17 +19,25 @@ import org.exbin.utils.guipopup.handler.TextComponentClipboardHandler;
 import org.exbin.utils.guipopup.handler.ListClipboardHandler;
 import org.exbin.utils.guipopup.handler.TableClipboardHandler;
 import java.awt.AWTEvent;
+import java.awt.AWTException;
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.KeyboardFocusManager;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.ScrollPane;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -44,16 +52,18 @@ import javax.swing.TransferHandler;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
+import org.exbin.utils.guipopup.panel.InspectComponentPanel;
+import org.openide.windows.WindowManager;
 
 /**
- * Utilities for default menu generation.
+ * Default menu generation.
  *
- * @version 0.1.0 2019/07/19
+ * @version 0.1.0 2019/07/22
  * @author ExBin Project (http://exbin.org)
  */
 public class GuiPopupMenu {
 
-    private final ResourceBundle resourceBundle = ResourceBundle.getBundle("org.exbin.utils.guipopup.GuiPopupMenu");
+    private final ResourceBundle resourceBundle = LanguageUtils.getResourceBundleByClass(GuiPopupMenu.class);
 
     private ActionMap defaultTextActionMap;
     private JPopupMenu defaultPopupMenu;
@@ -66,6 +76,10 @@ public class GuiPopupMenu {
     private DefaultPopupClipboardAction[] defaultTextActions;
 
     private static GuiPopupMenu instance = null;
+    private boolean registered = false;
+    private boolean inspectMode = false;
+    private EventQueue systemEventQueue;
+    private EventQueue overriddenQueue;
 
     private GuiPopupMenu() {
     }
@@ -83,8 +97,10 @@ public class GuiPopupMenu {
      */
     public static void register() {
         GuiPopupMenu defaultPopupMenu = getInstance();
-        defaultPopupMenu.initDefaultPopupMenu();
-        defaultPopupMenu.registerToEventQueue();
+        if (!defaultPopupMenu.registered) {
+            defaultPopupMenu.initDefaultPopupMenu();
+            defaultPopupMenu.registerToEventQueue();
+        }
     }
 
     /**
@@ -100,7 +116,22 @@ public class GuiPopupMenu {
     }
 
     private void registerToEventQueue() {
-        Toolkit.getDefaultToolkit().getSystemEventQueue().push(new PopupEventQueue());
+        overriddenQueue = new PopupEventQueue();
+        systemEventQueue = Toolkit.getDefaultToolkit().getSystemEventQueue();
+        systemEventQueue.push(overriddenQueue);
+        registered = true;
+    }
+
+    public static void unregister() {
+        GuiPopupMenu defaultPopupMenu = getInstance();
+        if (defaultPopupMenu.registered) {
+            defaultPopupMenu.unregisterQueue();
+        }
+    }
+
+    private void unregisterQueue() {
+        overriddenQueue.push(systemEventQueue);
+        registered = false;
     }
 
     private void initDefaultPopupMenu() {
@@ -268,6 +299,23 @@ public class GuiPopupMenu {
 
         @Override
         protected void dispatchEvent(AWTEvent event) {
+            if (event.getID() == MouseEvent.MOUSE_MOVED && inspectMode) {
+                inspectMode = false;
+                MouseEvent mouseEvent = (MouseEvent) event;
+                Component component = getSource(mouseEvent);
+                InspectComponentPanel inspectComponentPanel = new InspectComponentPanel();
+                inspectComponentPanel.setComponent(component, null);
+                Frame mainWindow = WindowManager.getDefault().getMainWindow();
+                final WindowUtils.DialogWrapper dialog = WindowUtils.createDialog(inspectComponentPanel, mainWindow, "Inspect Component", Dialog.ModalityType.MODELESS);
+                inspectComponentPanel.setCloseActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dialog.close();
+                    }
+                });
+                dialog.show();
+                return;
+            }
             super.dispatchEvent(event);
 
             if (event.getID() == MouseEvent.MOUSE_RELEASED || event.getID() == MouseEvent.MOUSE_PRESSED) {
@@ -294,7 +342,17 @@ public class GuiPopupMenu {
                 }
             } else if (event.getID() == KeyEvent.KEY_PRESSED) {
                 KeyEvent keyEvent = (KeyEvent) event;
-                if (keyEvent.getKeyCode() == KeyEvent.VK_CONTEXT_MENU || (keyEvent.getKeyCode() == KeyEvent.VK_F10 && keyEvent.isShiftDown())) {
+                if (keyEvent.getKeyCode() == KeyEvent.VK_F12 && keyEvent.isShiftDown() && keyEvent.isAltDown() && (keyEvent.isControlDown() || keyEvent.isMetaDown())) {
+                    // Unable to infer component from mouse position, so simulate click instead
+                    inspectMode = true;
+                    try {
+                        Robot robot = new Robot();
+                        Point location = MouseInfo.getPointerInfo().getLocation();
+                        robot.mouseMove(location.x, location.y);
+                    } catch (AWTException ex) {
+                        Logger.getLogger(GuiPopupMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (keyEvent.getKeyCode() == KeyEvent.VK_CONTEXT_MENU || (keyEvent.getKeyCode() == KeyEvent.VK_F10 && keyEvent.isShiftDown())) {
                     if (MenuSelectionManager.defaultManager().getSelectedPath().length > 0) {
                         // Menu was already created
                         return;
@@ -336,6 +394,19 @@ public class GuiPopupMenu {
             }
         }
 
+//        private Component findComponentByMousePosition() {
+//            SwingUtilities.getDeepestComponentAt(mainWindow, mouseLocation.x, mouseLocation.y);
+//            Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+////            Frame mainWindow = WindowManager.getDefault().getMainWindow();
+//            Frame mainWindow = WindowManager.getDefault().getMainWindow();
+//            Component.findUnderMouseInWindow
+//            List<Window> windows = Window.getWindows();
+//            for (Window window : windows) {
+//                Window owner = window.getOwner();
+//                SwingUtilities.getDeepestComponentAt(window., mouseLocation.x, mouseLocation.y);
+//            }
+//
+//        }
         private void activateMousePopup(MouseEvent mouseEvent, Component component, ClipboardActionsHandler clipboardHandler) {
             for (Object action : defaultTextActions) {
                 ((DefaultPopupClipboardAction) action).setClipboardHandler(clipboardHandler);
@@ -372,10 +443,10 @@ public class GuiPopupMenu {
                 defaultPopupMenu.show(component, (int) point.getX(), (int) point.getY());
             }
         }
+    }
 
-        private Component getSource(MouseEvent e) {
-            return SwingUtilities.getDeepestComponentAt(e.getComponent(), e.getX(), e.getY());
-        }
+    private static Component getSource(MouseEvent e) {
+        return SwingUtilities.getDeepestComponentAt(e.getComponent(), e.getX(), e.getY());
     }
 
     /**

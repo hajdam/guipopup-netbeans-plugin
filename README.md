@@ -3,8 +3,8 @@ GUI Popup & Inspect - NetBeans Plugin
 
 Registers popup menu and inspect function for all regular components in IDE.
 
-  - Use right click or Shift-F10 to show typical popup menu on various input boxes.
-  - Use Alt + Shift + Ctrl/Mac + F12 to show component inspect dialog
+ - Use right click or Shift-F10 to show typical popup menu on various input boxes.
+ - Use Alt + Shift + Ctrl/Mac + F12 to show component inspect dialog
 
 Homepage: https://github.com/hajdam/guipopup-netbeans-plugin  
 

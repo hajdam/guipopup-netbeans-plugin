@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.defaultpopup;
+package org.exbin.utils.guipopup;
 
 import org.openide.modules.ModuleInstall;
 import org.openide.windows.WindowManager;
@@ -31,7 +31,7 @@ public class Installer extends ModuleInstall {
         WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
             @Override
             public void run() {
-                ClipboardUtils.registerDefaultClipboardPopupMenu();
+                ClipboardUtils.registerGuiPopupMenu();
             }
         });
     }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.defaultpopup;
+package org.exbin.utils.guipopup;
 
 import java.awt.AWTEvent;
 import java.awt.EventQueue;

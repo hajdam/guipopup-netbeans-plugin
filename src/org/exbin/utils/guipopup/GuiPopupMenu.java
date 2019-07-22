@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.defaultpopup;
+package org.exbin.utils.guipopup;
 
-import org.exbin.utils.defaultpopup.handler.TextComponentClipboardHandler;
-import org.exbin.utils.defaultpopup.handler.ListClipboardHandler;
-import org.exbin.utils.defaultpopup.handler.TableClipboardHandler;
+import org.exbin.utils.guipopup.handler.TextComponentClipboardHandler;
+import org.exbin.utils.guipopup.handler.ListClipboardHandler;
+import org.exbin.utils.guipopup.handler.TableClipboardHandler;
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -51,9 +51,9 @@ import javax.swing.text.JTextComponent;
  * @version 0.1.0 2019/07/19
  * @author ExBin Project (http://exbin.org)
  */
-public class DefaultPopupMenu {
+public class GuiPopupMenu {
 
-    private final ResourceBundle resourceBundle = ResourceBundle.getBundle("org.exbin.utils.defaultpopup.DefaultPopupMenu");
+    private final ResourceBundle resourceBundle = ResourceBundle.getBundle("org.exbin.utils.guipopup.GuiPopupMenu");
 
     private ActionMap defaultTextActionMap;
     private JPopupMenu defaultPopupMenu;
@@ -65,14 +65,14 @@ public class DefaultPopupMenu {
     private DefaultPopupClipboardAction defaultSelectAllAction;
     private DefaultPopupClipboardAction[] defaultTextActions;
 
-    private static DefaultPopupMenu instance = null;
+    private static GuiPopupMenu instance = null;
 
-    private DefaultPopupMenu() {
+    private GuiPopupMenu() {
     }
 
-    public static synchronized DefaultPopupMenu getInstance() {
+    public static synchronized GuiPopupMenu getInstance() {
         if (instance == null) {
-            instance = new DefaultPopupMenu();
+            instance = new GuiPopupMenu();
         }
 
         return instance;
@@ -82,7 +82,7 @@ public class DefaultPopupMenu {
      * Registers default popup menu to AWT.
      */
     public static void register() {
-        DefaultPopupMenu defaultPopupMenu = getInstance();
+        GuiPopupMenu defaultPopupMenu = getInstance();
         defaultPopupMenu.initDefaultPopupMenu();
         defaultPopupMenu.registerToEventQueue();
     }
@@ -94,7 +94,7 @@ public class DefaultPopupMenu {
      * @param resourceClass resource class
      */
     public static void register(ResourceBundle resourceBundle, Class resourceClass) {
-        DefaultPopupMenu defaultPopupMenu = getInstance();
+        GuiPopupMenu defaultPopupMenu = getInstance();
         defaultPopupMenu.initDefaultPopupMenu(resourceBundle, resourceClass);
         defaultPopupMenu.registerToEventQueue();
     }

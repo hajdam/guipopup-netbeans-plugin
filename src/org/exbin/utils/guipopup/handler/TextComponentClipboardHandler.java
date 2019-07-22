@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.defaultpopup.handler;
+package org.exbin.utils.guipopup.handler;
 
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
-import org.exbin.utils.defaultpopup.ActionUtils;
-import org.exbin.utils.defaultpopup.ClipboardActionsHandler;
+import org.exbin.utils.guipopup.ActionUtils;
+import org.exbin.utils.guipopup.ClipboardActionsHandler;
 
 /**
  * Clipboard handler for JTextComponent.

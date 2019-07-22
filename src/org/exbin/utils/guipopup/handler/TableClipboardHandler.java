@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.defaultpopup.handler;
+package org.exbin.utils.guipopup.handler;
 
 import java.awt.datatransfer.StringSelection;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import org.exbin.utils.defaultpopup.ClipboardActionsHandler;
-import org.exbin.utils.defaultpopup.ClipboardUtils;
+import org.exbin.utils.guipopup.ClipboardActionsHandler;
+import org.exbin.utils.guipopup.ClipboardUtils;
 
 /**
  * Clipboard handler for JTable.

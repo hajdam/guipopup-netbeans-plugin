@@ -1,11 +1,14 @@
-Default Popup Menu - NetBeans Plugin
-====================================
+GUI Popup & Inspect - NetBeans Plugin
+=====================================
 
-Registers default clipboard popup menu for regular components.
+Registers popup menu and inspect function for all regular components in IDE.
 
-Homepage: https://github.com/hajdam/defaultpopup-netbeans-plugin  
+  - Use right click or Shift-F10 to show typical popup menu on various input boxes.
+  - Use Alt + Shift + Ctrl/Mac + F12 to show component inspect dialog
 
-Published as: http://plugins.netbeans.org/plugin/xxxxxx/  
+Homepage: https://github.com/hajdam/guipopup-netbeans-plugin  
+
+Published as: TODO  
 
 Screenshot
 ----------
@@ -15,8 +18,9 @@ Screenshot
 Features
 --------
 
- - Show popup menu with cut/copy/paste/delete and select all action
+ - Show popup menu with clipboard cut/copy/paste actions delete, select all and some utilities actions
  - Supported components JTextComponent, JList, JTable
+ - Shows inspect dialog with values readable by reflections for component currently pointed on with mouse
 
 Compiling
 ---------

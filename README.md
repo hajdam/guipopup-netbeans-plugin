@@ -8,7 +8,7 @@ Registers popup menu and inspect function for all regular components in IDE.
 
 Homepage: https://github.com/hajdam/guipopup-netbeans-plugin  
 
-Published as: TODO  
+Published as: http://plugins.netbeans.org/plugin/76228/  
 
 Screenshot
 ----------

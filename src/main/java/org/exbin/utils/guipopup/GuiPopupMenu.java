@@ -295,6 +295,7 @@ public class GuiPopupMenu {
         }
     }
 
+    // TODO extend org.netbeans.core.TimableEventQueue
     public class PopupEventQueue extends EventQueue {
 
         @Override

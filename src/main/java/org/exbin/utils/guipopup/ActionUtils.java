@@ -16,9 +16,11 @@
 package org.exbin.utils.guipopup;
 
 import java.awt.AWTEvent;
+import java.awt.Event;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.ResourceBundle;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -98,8 +100,29 @@ public class ActionUtils {
         }
     }
 
+    /**
+     * Returns platform specific down mask filter.
+     *
+     * @return down mask for meta keys
+     */
+    @SuppressWarnings("deprecation")
     public static int getMetaMask() {
-        return java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+        try {
+            switch (java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
+                case Event.CTRL_MASK:
+                    return KeyEvent.CTRL_DOWN_MASK;
+                case Event.META_MASK:
+                    return KeyEvent.META_DOWN_MASK;
+                case Event.SHIFT_MASK:
+                    return KeyEvent.SHIFT_DOWN_MASK;
+                case Event.ALT_MASK:
+                    return KeyEvent.ALT_DOWN_MASK;
+                default:
+                    return KeyEvent.CTRL_DOWN_MASK;
+            }
+        } catch (java.awt.HeadlessException ex) {
+            return KeyEvent.CTRL_DOWN_MASK;
+        }
     }
 
     /**

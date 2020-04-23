@@ -25,9 +25,9 @@ Features
 Compiling
 ---------
 
-Java Development Kit (JDK) version 7 or later is required to build this project.
+Java Development Kit (JDK) version 8 or later is required to build this project.
 
-NetBeans platform is necessary for build of this plugin. See. http://netbeans.apache.org  
+Gradle 4.x is needed to build this project.  
 
 License
 -------

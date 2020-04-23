@@ -3,5 +3,5 @@ AutoUpdate-Show-In-Client: true
 OpenIDE-Module: org.exbin.utils.guipopup
 OpenIDE-Module-Install: org/exbin/utils/guipopup/Installer.class
 OpenIDE-Module-Localizing-Bundle: org/exbin/utils/guipopup/Bundle.properties
-OpenIDE-Module-Specification-Version: 0.1.0
+OpenIDE-Module-Specification-Version: 0.1.1
 

@@ -175,11 +175,11 @@ nbm {
     moduleInstall = 'org/exbin/utils/guipopup/Installer'
     localizingBundle = 'org/exbin/utils/guipopup/Bundle.properties'
 
-//    keyStore {
-//        keyStoreFile = 'private/keystore'
-//        username = 'guipopup'
-//        password = ''
-//    }
+//        keyStore {
+//            keyStoreFile = 'private/keystore'
+//            username = 'guipopup'
+//            password = ''
+//        }
 }
 
 def netbeansModule = { String groupName, String moduleName ->
@@ -299,20 +299,36 @@ publishing {
 }
 
 if (gradle.startParameter.taskNames.contains("uploadArchives") && !version.endsWith('-SNAPSHOT')) {
+
+    configurations {
+        releaseArtifacts {}
+    }
+    
+    artifacts {
+        archives javadocJar, sourcesJar
+
+        archives (tasks.nbm.outputFile) {
+            name = "${project.name}-${project.version}"
+            extension = 'nbm'
+            type = 'nbm'
+        }
+
+        releaseArtifacts jar
+        releaseArtifacts (tasks.nbm.outputFile) {
+            name = "${project.name}-${project.version}"
+            extension = 'nbm'
+            type = 'nbm'
+        }
+        releaseArtifacts javadocJar
+        releaseArtifacts sourcesJar
+    }
+
     signing {
         sign tasks.nbm.outputFile
+        sign configurations.releaseArtifacts
     }
 
     uploadArchives {
-        artifacts {
-            archives javadocJar, sourcesJar
-            archives (tasks.nbm.outputFile) {
-                name = "${project.name}-${project.version}"
-                extension = 'nbm'
-                type = 'nbm'
-            }
-        }
-
         repositories {
             mavenDeployer {
                 beforeDeployment {

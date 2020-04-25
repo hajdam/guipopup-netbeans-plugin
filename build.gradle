@@ -17,7 +17,7 @@ buildscript {
     }
 }
 
-['java', 'distribution', 'maven', 'maven-publish', 'signing', 'cz.kubacki.nbm'].each {
+['java', 'maven', 'maven-publish', 'signing', 'cz.kubacki.nbm'].each {
     apply plugin: it
 }
 
@@ -25,7 +25,7 @@ ext.scriptFile = { String fileName ->
     return new File(new File(rootDir, 'gradle'), fileName)
 }
 
-version = '0.1.1-SNAPSHOT'
+version = '0.1.1'
 group = 'org.exbin.utils.guipopup'
 
 sourceCompatibility = '1.8'
@@ -95,14 +95,6 @@ task testJar(type: Jar, dependsOn: testClasses) {
 
 compileTestJava.dependsOn(jar)
 
-//def manifestClassPath() {
-//    try {
-//        return (configurations.runtime.collect { 'lib/' + it.getName() }).join(' ')
-//    } catch (Exception) {
-//        return ""
-//    }
-//}
-//
 //jar {
 //    attributes(
 ////        'Main-Class': mainClass,
@@ -183,11 +175,11 @@ nbm {
     moduleInstall = 'org/exbin/utils/guipopup/Installer'
     localizingBundle = 'org/exbin/utils/guipopup/Bundle.properties'
 
-    //    keyStore {
-    //        keyStoreFile = tryGetProperty('nbGradlePluginKeyStore', null)
-    //        username = tryGetProperty('nbGradlePluginKeyStoreUser', 'hajdam')
-    //        password = tryGetProperty('nbGradlePluginKeyStorePass', '')
-    //    }
+//    keyStore {
+//        keyStoreFile = 'private/keystore'
+//        username = 'guipopup'
+//        password = ''
+//    }
 }
 
 def netbeansModule = { String groupName, String moduleName ->
@@ -222,16 +214,16 @@ task sourcesJar(type: Jar, dependsOn: classes, description: 'Creates a jar from 
 
 uploadArchives.dependsOn tasks.nbm
 publish.dependsOn tasks.nbm
-artifacts {
-    archives jar
-    archives sourcesJar
-    tests testJar
-    archives (tasks.nbm.outputFile) {
-        name = "${project.name}-${project.version}"
-        extension = 'nbm'
-        type = 'nbm'
-    }
-}
+//artifacts {
+//    archives jar
+//    archives sourcesJar
+//    tests testJar
+//    archives (tasks.nbm.outputFile) {
+//        name = "${project.name}-${project.version}"
+//        extension = 'nbm'
+//        type = 'nbm'
+//    }
+//}
 
 task netBeansRun(type: Exec) {
     doFirst {
@@ -261,19 +253,16 @@ publishing {
             artifact (javadocJar) {
                 classifier 'javadoc'
             }
-            //            artifact (nbmFile) {
-            //                classifier 'nbm'
-            //                extension = 'nbm'
-            //            }
-            artifact (tasks.nbm.outputFile) {
+            artifact (nbmFile) {
+                classifier 'nbm'
                 extension = 'nbm'
             }
 
-            pom.packaging 'nbm'
             pom.withXml {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
                     name deployName
+                    packaging 'nbm'
                     description deployDescription
                     url deployUrl
                     scm {
@@ -310,20 +299,20 @@ publishing {
 }
 
 if (gradle.startParameter.taskNames.contains("uploadArchives") && !version.endsWith('-SNAPSHOT')) {
-    artifacts {
-        archives javadocJar, sourcesJar
-        archives (tasks.nbm.outputFile) {
-            name = "${project.name}-${project.version}"
-            extension = 'nbm'
-            type = 'nbm'
-        }
-    }
-
     signing {
-        sign configurations.archives
+        sign tasks.nbm.outputFile
     }
 
     uploadArchives {
+        artifacts {
+            archives javadocJar, sourcesJar
+            archives (tasks.nbm.outputFile) {
+                name = "${project.name}-${project.version}"
+                extension = 'nbm'
+                type = 'nbm'
+            }
+        }
+
         repositories {
             mavenDeployer {
                 beforeDeployment {
@@ -338,9 +327,9 @@ if (gradle.startParameter.taskNames.contains("uploadArchives") && !version.endsW
                     authentication(userName: ossrhUsername, password: ossrhPassword)
                 }
 
-                pom.packaging 'nbm'
                 pom.project {
                     name deployName
+                    packaging 'nbm'
                     description deployDescription
                     url deployUrl
 

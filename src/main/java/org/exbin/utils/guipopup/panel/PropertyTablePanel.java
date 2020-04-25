@@ -16,6 +16,7 @@
 package org.exbin.utils.guipopup.panel;
 
 import java.awt.Component;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -26,7 +27,7 @@ import javax.swing.table.TableColumnModel;
 /**
  * Panel for properties of the actual panel.
  *
- * @version 0.1.0 2019/07/22
+ * @version 0.1.1 2020/04/25
  * @author ExBin Project (http://exbin.org)
  */
 public class PropertyTablePanel extends javax.swing.JPanel {
@@ -85,31 +86,40 @@ public class PropertyTablePanel extends javax.swing.JPanel {
         tableModel.removeAll();
 
         Class<?> clazz = object.getClass();
-        while (clazz != null) {
-            Field[] fields = clazz.getDeclaredFields();
-            for (int i = 0; i < fields.length; i++) {
-                Field field = fields[i];
-                if (!showStaticFields && java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
-                    continue;
-                }
-
-                Object value;
-                try {
-                    boolean accessible = field.isAccessible();
-                    if (!accessible) {
-                        field.setAccessible(true);
-                    }
-                    value = field.get(object);
-                    if (!accessible) {
-                        field.setAccessible(false);
-                    }
-                } catch (IllegalArgumentException | IllegalAccessException ex) {
-                    value = null;
-                }
-                PropertyTableItem item = new PropertyTableItem(field.getName(), field.getGenericType().getTypeName(), value);
+        if (clazz.isArray()) {
+            int length = Array.getLength(object);
+            for (int i = 0; i < length; i++) {
+                Object field = Array.get(object, i);
+                PropertyTableItem item = new PropertyTableItem(String.valueOf(i), field == null ? "-" : field.getClass().getTypeName(), field);
                 tableModel.addRow(item);
             }
-            clazz = clazz.getSuperclass();
+        } else {
+            while (clazz != null) {
+                Field[] fields = clazz.getDeclaredFields();
+                for (int i = 0; i < fields.length; i++) {
+                    Field field = fields[i];
+                    if (!showStaticFields && java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                        continue;
+                    }
+
+                    Object value;
+                    try {
+                        boolean accessible = field.isAccessible();
+                        if (!accessible) {
+                            field.setAccessible(true);
+                        }
+                        value = field.get(object);
+                        if (!accessible) {
+                            field.setAccessible(false);
+                        }
+                    } catch (IllegalArgumentException | IllegalAccessException ex) {
+                        value = null;
+                    }
+                    PropertyTableItem item = new PropertyTableItem(field.getName(), field.getGenericType().getTypeName(), value);
+                    tableModel.addRow(item);
+                }
+                clazz = clazz.getSuperclass();
+            }
         }
     }
 

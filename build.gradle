@@ -25,7 +25,7 @@ ext.scriptFile = { String fileName ->
     return new File(new File(rootDir, 'gradle'), fileName)
 }
 
-version = '0.1.1'
+version = '0.1.2-SNAPSHOT'
 group = 'org.exbin.utils.guipopup'
 
 sourceCompatibility = '1.8'

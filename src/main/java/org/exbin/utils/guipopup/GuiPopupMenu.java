@@ -52,7 +52,7 @@ import javax.swing.TransferHandler;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
-import org.exbin.utils.guipopup.panel.InspectComponentPanel;
+import org.exbin.utils.guipopup.gui.InspectComponentPanel;
 import org.openide.windows.WindowManager;
 
 /**

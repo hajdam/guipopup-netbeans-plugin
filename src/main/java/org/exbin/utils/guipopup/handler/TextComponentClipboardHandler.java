@@ -23,7 +23,7 @@ import org.exbin.utils.guipopup.ClipboardActionsHandler;
 /**
  * Clipboard handler for JTextComponent.
  *
- * @version 0.1.1 2020/04/25
+ * @version 0.1.2 2020/07/21
  * @author ExBin Project (http://exbin.org)
  */
 public class TextComponentClipboardHandler implements ClipboardActionsHandler {
@@ -58,6 +58,10 @@ public class TextComponentClipboardHandler implements ClipboardActionsHandler {
     public void performSelectAll() {
         txtComp.requestFocus();
         ActionUtils.invokeTextAction(txtComp, DefaultEditorKit.selectAllAction);
+        int docLength = txtComp.getDocument().getLength();
+        if (txtComp.getSelectionStart() > 0 || txtComp.getSelectionEnd() != docLength) {
+            txtComp.selectAll();
+        }
     }
 
     @Override

@@ -24,6 +24,8 @@ import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -34,6 +36,7 @@ import javax.swing.JRootPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 
@@ -48,6 +51,22 @@ public class WindowUtils {
     private static final int BUTTON_CLICK_TIME = 150;
 
     private WindowUtils() {
+    }
+
+    public static void invokeWindow(final Window window) {
+        java.awt.EventQueue.invokeLater(() -> {
+            if (window instanceof JDialog) {
+                ((JDialog) window).setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+            }
+
+            window.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            window.setVisible(true);
+        });
     }
 
     public static DialogWrapper createDialog(final JComponent component, Component parent, String dialogTitle, Dialog.ModalityType modalityType) {
@@ -111,6 +130,11 @@ public class WindowUtils {
         dialog.add(component);
         dialog.setSize(size.width + 8, size.height + 24);
         return dialog;
+    }
+
+    public static void invokeDialog(final JComponent component) {
+        JDialog dialog = createDialog(component);
+        invokeWindow(dialog);
     }
 
     public static void closeWindow(Window window) {

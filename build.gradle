@@ -1,6 +1,6 @@
 import java.nio.file.*
 import org.gradle.util.VersionNumber
-import java.util.jar.Pack200
+//import java.util.jar.Pack200
 import java.util.zip.GZIPOutputStream
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
@@ -42,8 +42,8 @@ ext {
     deployDescription = 'Registers popup menu and inspect function for all regular components in IDE'
 }
 
-ext.packer = Pack200.newPacker()
-packer.properties()["pack.effort"] = "9"
+//ext.packer = Pack200.newPacker()
+//packer.properties()["pack.effort"] = "9"
 
 repositories {
     mavenCentral()
@@ -200,11 +200,17 @@ dependencies {
     providedCompile netbeansApi('org-openide-util-ui')
     providedCompile netbeansApi('org-openide-windows')
 
-    compile 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly 'com.bulenkov:darcula-2018.2'
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
     providedRuntime netbeansModule('org.netbeans.modules', 'org-netbeans-modules-projectapi-nb')
 
+    if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
+        // Workaround for @javax.annotation.Generated
+        // see: https://github.com/grpc/grpc-java/issues/3633
+        implementation("javax.annotation:javax.annotation-api:1.3.2")
+    }
 }
 
 task sourcesJar(type: Jar, dependsOn: classes, description: 'Creates a jar from the source files.') {

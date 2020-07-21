@@ -28,7 +28,11 @@ Compiling
 
 Java Development Kit (JDK) version 8 or later is required to build this project.
 
-Gradle 4.x is needed to build this project.  
+Currently Gradle version 4.x is needed to build this project.
+
+Use:  
+gradle wrapper --gradle-version 4.10  
+./gradlew build nbm  
 
 License
 -------

@@ -10,14 +10,17 @@ import java.util.zip.ZipFile
 buildscript {
     repositories {
         jcenter()
+        flatDir {
+            dirs "lib"
+        }
     }
     dependencies {
-        classpath "cz.kubacki.gradle.plugins:gradle-nbm-plugin:1.17.0"
+        classpath "cz.kubacki.gradle.plugins:gradle-nbm-plugin:1.17.1-dev.6.uncommitted+3041178"
         gradleApi()
     }
 }
 
-['java', 'maven', 'maven-publish', 'signing', 'cz.kubacki.nbm'].each {
+['java', 'distribution', 'maven-publish', 'signing', 'cz.kubacki.nbm'].each {
     apply plugin: it
 }
 
@@ -48,10 +51,10 @@ ext {
 repositories {
     mavenCentral()
     String nbRepo = netbeansVersion.endsWith('-SNAPSHOT')
-    ? 'http://bits.netbeans.org/netbeans/trunk/new-maven-snapshot'
-: 'http://bits.netbeans.org/nexus/content/groups/netbeans'
+    ? 'https://bits.netbeans.org/netbeans/trunk/new-maven-snapshot'
+: 'https://bits.netbeans.org/nexus/content/groups/netbeans'
     maven { url nbRepo }
-    maven { url 'http://repo.gradle.org/gradle/libs-releases-local' }
+    maven { url 'https://repo.gradle.org/gradle/libs-releases-local' }
     jcenter()
     flatDir {
         dirs "lib"
@@ -89,7 +92,7 @@ if (!gradle.startParameter.taskNames.any {it.endsWith("test")}) {
 
 task testJar(type: Jar, dependsOn: testClasses) {
     classifier "tests"
-    baseName = "test-${project.archivesBaseName}"
+    archiveBaseName = "test-${project.archivesBaseName}"
     from sourceSets.test.output
 }
 
@@ -279,7 +282,7 @@ publishing {
                     licenses {
                         license {
                             name 'Apache License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            url 'https://www.apache.org/licenses/LICENSE-2.0.txt'
                             distribution 'repo'
                         }
                     }
@@ -363,7 +366,7 @@ if (gradle.startParameter.taskNames.contains("uploadArchives") && !version.endsW
                     licenses {
                         license {
                             name 'Apache License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            url 'https://www.apache.org/licenses/LICENSE-2.0.txt'
                             distribution 'repo'
                         }
                     }

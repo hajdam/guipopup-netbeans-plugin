@@ -19,6 +19,7 @@ import com.bulenkov.darcula.ui.DarculaButtonPainter;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -26,14 +27,14 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.plaf.basic.BasicBorders;
-import org.exbin.utils.guipopup.WindowUtils;
+import org.exbin.framework.utils.WindowUtils;
 
 /**
  * Empty property column panel with operation button.
  *
- * @version 0.1.0 2019/07/22
  * @author ExBin Project (http://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class ComponentPropertyTableCellPanel extends javax.swing.JPanel {
 
     private JComponent cellComponent;
@@ -130,6 +131,7 @@ public class ComponentPropertyTableCellPanel extends javax.swing.JPanel {
         editorButton.addActionListener(actionListener);
     }
 
+    @Nonnull
     public JComponent getCellComponent() {
         return cellComponent;
     }

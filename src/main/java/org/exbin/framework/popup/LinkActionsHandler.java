@@ -13,22 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.guipopup;
+package org.exbin.framework.popup;
 
-import org.openide.modules.ModuleInstall;
-import org.openide.windows.WindowManager;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Module installer.
+ * Interface for link handler for visual component / context menu.
  *
  * @author ExBin Project (http://exbin.org)
  */
-public class Installer extends ModuleInstall {
+@ParametersAreNonnullByDefault
+public interface LinkActionsHandler {
 
-    @Override
-    public void restored() {
-        WindowManager.getDefault().invokeWhenUIReady(() -> {
-            NetBeansPopupMenu.register();
-        });
-    }
+    /**
+     * Performs copy link to clipboard operation.
+     */
+    void performCopyLink();
+
+    /**
+     * Opens link using default browser.
+     */
+    void performOpenLink();
+
+    /**
+     * Returns if true if link is selected.
+     *
+     * @return true if link is selected
+     */
+    boolean isLinkSelected();
 }

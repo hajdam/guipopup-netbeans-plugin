@@ -13,56 +13,61 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.guipopup.handler;
+package org.exbin.framework.popup.handler;
 
 import java.awt.datatransfer.StringSelection;
 import java.util.List;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JList;
-import org.exbin.utils.guipopup.ClipboardActionsHandler;
-import org.exbin.utils.guipopup.ClipboardUtils;
+import org.exbin.framework.utils.ClipboardActionsHandler;
+import org.exbin.framework.utils.ClipboardActionsUpdateListener;
+import org.exbin.framework.utils.ClipboardUtils;
 
 /**
- * Clipboard handler for JList.
+ * Popup handler for JList.
  *
- * @version 0.1.0 2019/07/18
+ * @version 0.2.1 2022/05/01
  * @author ExBin Project (http://exbin.org)
  */
-public class ListClipboardHandler implements ClipboardActionsHandler {
-    
-    private final JList listComp;
+@ParametersAreNonnullByDefault
+public class ListPopupHandler implements ClipboardActionsHandler {
 
-    public ListClipboardHandler(JList listComp) {
+    private final JList<?> listComp;
+
+    public ListPopupHandler(JList<?> listComp) {
         this.listComp = listComp;
     }
 
     @Override
     public void performCut() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new IllegalStateException();
     }
 
     @Override
     public void performCopy() {
         StringBuilder builder = new StringBuilder();
-        List rows = listComp.getSelectedValuesList();
+        List<?> rows = listComp.getSelectedValuesList();
         boolean empty = true;
         for (Object row : rows) {
             builder.append(empty ? row.toString() : System.getProperty("line.separator") + row);
+
             if (empty) {
                 empty = false;
             }
         }
+
         ClipboardUtils.getClipboard().setContents(new StringSelection(builder.toString()), null);
     }
 
     @Override
     public void performPaste() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new IllegalStateException();
     }
 
     @Override
     public void performDelete() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new IllegalStateException();
     }
 
     @Override
@@ -88,8 +93,17 @@ public class ListClipboardHandler implements ClipboardActionsHandler {
     }
 
     @Override
+    public void setUpdateListener(ClipboardActionsUpdateListener updateListener) {
+        // Ignore
+    }
+
+    @Override
     public boolean canPaste() {
         return true;
     }
-    
+
+    @Override
+    public boolean canDelete() {
+        return true;
+    }
 }

@@ -13,17 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.guipopup;
+package org.exbin.framework.utils;
 
-import java.awt.Component;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.Action;
 
 /**
- * Listener for lazy component creations.
+ * Interface for clipboard editing actions.
  *
- * @version 0.1.0 2019/07/22
+ * @version 0.2.0 2016/01/09
  * @author ExBin Project (http://exbin.org)
  */
-public interface LazyComponentListener {
+@ParametersAreNonnullByDefault
+public interface ClipboardActionsApi {
 
-    void componentCreated(Component component);
+    @Nonnull
+    Action getCutAction();
+
+    @Nonnull
+    Action getCopyAction();
+
+    @Nonnull
+    Action getPasteAction();
+
+    @Nonnull
+    Action getDeleteAction();
+
+    @Nonnull
+    Action getSelectAllAction();
 }

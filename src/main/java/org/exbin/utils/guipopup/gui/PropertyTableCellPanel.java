@@ -19,16 +19,17 @@ import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JComponent;
-import org.exbin.utils.guipopup.WindowUtils;
+import org.exbin.framework.utils.WindowUtils;
 import org.openide.windows.WindowManager;
 
 /**
  * Properties table cell panel.
  *
- * @version 0.1.0 2019/07/22
  * @author ExBin Project (http://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class PropertyTableCellPanel extends ComponentPropertyTableCellPanel {
 
     private final String name;

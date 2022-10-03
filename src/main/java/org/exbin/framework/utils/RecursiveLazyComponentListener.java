@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.guipopup;
+package org.exbin.framework.utils;
 
 import java.awt.Component;
 import java.awt.Container;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Recursive interface for panels creating lazy components.
  *
- * @version 0.1.0 2019/07/22
+ * @version 0.2.1 2019/07/13
  * @author ExBin Project (http://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class RecursiveLazyComponentListener implements LazyComponentListener {
 
     private final LazyComponentListener listener;
@@ -37,7 +39,7 @@ public class RecursiveLazyComponentListener implements LazyComponentListener {
         fireListener(component);
     }
 
-    protected void fireListener(Component component) {
+    public void fireListener(Component component) {
         listener.componentCreated(component);
 
         if (component instanceof Container) {
@@ -45,6 +47,10 @@ public class RecursiveLazyComponentListener implements LazyComponentListener {
             for (Component child : comps) {
                 fireListener(child);
             }
+        }
+
+        if (component instanceof LazyComponentsIssuable) {
+            ((LazyComponentsIssuable) component).addChildComponentListener(this);
         }
     }
 }

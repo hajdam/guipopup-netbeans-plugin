@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.guipopup;
+package org.exbin.framework.utils;
 
-import org.openide.modules.ModuleInstall;
-import org.openide.windows.WindowManager;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Module installer.
+ * Interface for panels creating lazy components.
  *
+ * @version 0.2.1 2019/07/13
  * @author ExBin Project (http://exbin.org)
  */
-public class Installer extends ModuleInstall {
+@ParametersAreNonnullByDefault
+public interface LazyComponentsIssuable {
 
-    @Override
-    public void restored() {
-        WindowManager.getDefault().invokeWhenUIReady(() -> {
-            NetBeansPopupMenu.register();
-        });
-    }
+    void addChildComponentListener(LazyComponentListener listener);
+
+    void removeChildComponentListener(LazyComponentListener listener);
 }

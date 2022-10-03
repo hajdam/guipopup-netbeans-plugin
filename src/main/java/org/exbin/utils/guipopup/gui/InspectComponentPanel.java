@@ -17,16 +17,19 @@ package org.exbin.utils.guipopup.gui;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import org.exbin.utils.guipopup.LanguageUtils;
+import org.exbin.framework.utils.LanguageUtils;
 
 /**
  * Inspection panel for GUI component.
  *
- * @version 0.1.0 2019/07/22
  * @author ExBin Project (http://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class InspectComponentPanel extends javax.swing.JPanel {
 
     private final java.util.ResourceBundle resourceBundle = LanguageUtils.getResourceBundleByClass(InspectComponentPanel.class);
@@ -40,7 +43,7 @@ public class InspectComponentPanel extends javax.swing.JPanel {
         initComponents();
     }
 
-    public void setComponent(Object component, String componentName) {
+    public void setComponent(Object component, @Nullable String componentName) {
         this.component = component;
 
         componentClassTextField.setText(componentName == null ? "-" : componentName);
@@ -76,6 +79,7 @@ public class InspectComponentPanel extends javax.swing.JPanel {
         }
     }
 
+    @Nonnull
     private String getClassName(Class<?> clazz) {
         String name = clazz.getCanonicalName();
         if (name == null) {

@@ -13,40 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.guipopup.handler;
+package org.exbin.framework.popup.handler;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
-import org.exbin.utils.guipopup.ActionUtils;
-import org.exbin.utils.guipopup.ClipboardActionsHandler;
+import org.exbin.framework.utils.ActionUtils;
+import org.exbin.framework.utils.ClipboardActionsHandler;
+import org.exbin.framework.utils.ClipboardActionsUpdateListener;
 
 /**
- * Clipboard handler for JTextComponent.
+ * Popup handler for text component.
  *
- * @version 0.1.2 2020/07/21
+ * @version 0.2.1 2022/05/01
  * @author ExBin Project (http://exbin.org)
  */
-public class TextComponentClipboardHandler implements ClipboardActionsHandler {
+@ParametersAreNonnullByDefault
+public class TextComponentPopupHandler implements ClipboardActionsHandler {
 
     private final JTextComponent txtComp;
 
-    public TextComponentClipboardHandler(JTextComponent txtComp) {
+    public TextComponentPopupHandler(JTextComponent txtComp) {
         this.txtComp = txtComp;
     }
 
     @Override
     public void performCut() {
-        ActionUtils.invokeTextAction(txtComp, DefaultEditorKit.cutAction);
+        txtComp.cut();
     }
 
     @Override
     public void performCopy() {
-        ActionUtils.invokeTextAction(txtComp, DefaultEditorKit.copyAction);
+        txtComp.copy();
     }
 
     @Override
     public void performPaste() {
-        ActionUtils.invokeTextAction(txtComp, DefaultEditorKit.pasteAction);
+        txtComp.paste();
     }
 
     @Override
@@ -56,12 +60,14 @@ public class TextComponentClipboardHandler implements ClipboardActionsHandler {
 
     @Override
     public void performSelectAll() {
-        txtComp.requestFocus();
-        ActionUtils.invokeTextAction(txtComp, DefaultEditorKit.selectAllAction);
-        int docLength = txtComp.getDocument().getLength();
-        if (txtComp.getSelectionStart() > 0 || txtComp.getSelectionEnd() != docLength) {
-            txtComp.selectAll();
-        }
+        SwingUtilities.invokeLater(() -> {
+            txtComp.requestFocus();
+            ActionUtils.invokeTextAction(txtComp, DefaultEditorKit.selectAllAction);
+            int docLength = txtComp.getDocument().getLength();
+            if (txtComp.getSelectionStart() > 0 || txtComp.getSelectionEnd() != docLength) {
+                txtComp.selectAll();
+            }
+        });
     }
 
     @Override
@@ -80,8 +86,17 @@ public class TextComponentClipboardHandler implements ClipboardActionsHandler {
     }
 
     @Override
+    public void setUpdateListener(ClipboardActionsUpdateListener updateListener) {
+        // Ignore
+    }
+
+    @Override
     public boolean canPaste() {
         return true;
     }
 
+    @Override
+    public boolean canDelete() {
+        return true;
+    }
 }

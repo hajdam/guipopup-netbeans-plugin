@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.guipopup;
+package org.exbin.framework.utils;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Interface for clipboard handler for visual component / context menu.
  *
- * @version 0.1.0 2019/07/18
+ * @version 0.2.1 2020/07/24
  * @author ExBin Project (http://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public interface ClipboardActionsHandler {
 
     /**
@@ -76,4 +79,18 @@ public interface ClipboardActionsHandler {
      * @return true if can perform paste
      */
     boolean canPaste();
+
+    /**
+     * Returns whether it is possible to perform delete.
+     *
+     * @return true, if delete operation is allowed.
+     */
+    boolean canDelete();
+
+    /**
+     * Sets listener for clipboard actions related updates.
+     *
+     * @param updateListener update listener
+     */
+    void setUpdateListener(ClipboardActionsUpdateListener updateListener);
 }

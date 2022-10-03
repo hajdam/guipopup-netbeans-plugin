@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.guipopup;
+package org.exbin.framework.popup;
 
-import org.openide.modules.ModuleInstall;
-import org.openide.windows.WindowManager;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Module installer.
+ * Interface for text handler for visual component / context menu.
  *
  * @author ExBin Project (http://exbin.org)
  */
-public class Installer extends ModuleInstall {
+@ParametersAreNonnullByDefault
+public interface TextActionsHandler {
 
-    @Override
-    public void restored() {
-        WindowManager.getDefault().invokeWhenUIReady(() -> {
-            NetBeansPopupMenu.register();
-        });
-    }
+    /**
+     * Performs copy text to clipboard operation.
+     */
+    void performCopyText();
+
+    /**
+     * Returns if true if text is selected.
+     *
+     * @return true if text is selected
+     */
+    boolean isTextSelected();
 }

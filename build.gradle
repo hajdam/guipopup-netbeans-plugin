@@ -36,7 +36,7 @@ targetCompatibility = sourceCompatibility
 
 ext {
     //    netbeansVersion = 'dev-SNAPSHOT'
-    netbeansVersion = 'RELEASE82'
+    netbeansVersion = 'RELEASE110'
     repositoryName = "guipopup-netbeans-plugin"
     nbmVersion = version.endsWith('-SNAPSHOT') ? version.substring(0, version.length() - 9) : version
     homePageUrl = 'https://github.com/hajdam/guipopup-netbeans-plugin'
@@ -92,7 +92,11 @@ if (!gradle.startParameter.taskNames.any {it.endsWith("test")}) {
 
 task testJar(type: Jar, dependsOn: testClasses) {
     classifier "tests"
-    archiveBaseName = "test-${project.archivesBaseName}"
+    if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
+    	archiveBaseName = "test-${project.archivesBaseName}"
+    } else {
+    	archiveName = "test-${project.archivesBaseName}"
+    }
     from sourceSets.test.output
 }
 
@@ -198,6 +202,12 @@ def netbeansApi = { String moduleName ->
 }
 
 dependencies {
+//    if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
+//        netbeans "org.netbeans.api:org-openide-awt:$netbeansVersion"
+//        netbeans "org.netbeans.api:org-openide-util:$netbeansVersion"
+//        netbeans "org.netbeans.api:org-netbeans-api-annotations-common:$netbeansVersion"
+//    }
+
     providedCompile netbeansApi('org-openide-dialogs')
     providedCompile netbeansApi('org-openide-modules')
     providedCompile netbeansApi('org-openide-util-ui')
@@ -217,6 +227,7 @@ dependencies {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes, description: 'Creates a jar from the source files.') {
+    duplicatesStrategy = 'exclude'
     classifier = 'sources'
     from sourceSets.main.allSource
 }
@@ -271,7 +282,7 @@ publishing {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
                     name deployName
-                    packaging 'nbm'
+                    pom.packaging 'nbm'
                     description deployDescription
                     url deployUrl
                     scm {

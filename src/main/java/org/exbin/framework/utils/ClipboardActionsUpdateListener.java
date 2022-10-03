@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.guipopup;
-
-import org.openide.modules.ModuleInstall;
-import org.openide.windows.WindowManager;
+package org.exbin.framework.utils;
 
 /**
- * Module installer.
+ * Clipboard actions update listener.
  *
+ * @version 0.2.0 2016/01/24
  * @author ExBin Project (http://exbin.org)
  */
-public class Installer extends ModuleInstall {
+public interface ClipboardActionsUpdateListener {
 
-    @Override
-    public void restored() {
-        WindowManager.getDefault().invokeWhenUIReady(() -> {
-            NetBeansPopupMenu.register();
-        });
-    }
+    /**
+     * Notify about change in undo state.
+     */
+    void stateChanged();
 }

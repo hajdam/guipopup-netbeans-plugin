@@ -13,19 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.guipopup;
+package org.exbin.framework.utils;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Window;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -36,17 +28,26 @@ import javax.swing.JRootPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
-import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Window;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 
 /**
  * Utility static methods usable for windows and dialogs.
  *
- * @version 0.1.0 2019/07/22
  * @author ExBin Project (http://exbin.org)
+ * @version 0.1.0 2019/07/22
  */
-public class WindowUtils {
+@ParametersAreNonnullByDefault
+public final class WindowUtils {
 
     private static final int BUTTON_CLICK_TIME = 150;
 
@@ -58,7 +59,6 @@ public class WindowUtils {
             if (window instanceof JDialog) {
                 ((JDialog) window).setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
             }
-
             window.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosing(java.awt.event.WindowEvent e) {
@@ -69,6 +69,7 @@ public class WindowUtils {
         });
     }
 
+    @Nonnull
     public static DialogWrapper createDialog(final JComponent component, Component parent, String dialogTitle, Dialog.ModalityType modalityType) {
         DialogDescriptor dialogDescriptor = new DialogDescriptor(component, dialogTitle, modalityType != Dialog.ModalityType.MODELESS, new Object[0], null, 0, null, null);
         final Dialog dialog = DialogDisplayer.getDefault().createDialog(dialogDescriptor);
@@ -83,7 +84,7 @@ public class WindowUtils {
             }
 
             @Override
-            public void showCentered(Component component) {
+            public void showCentered(@Nullable Component component) {
                 center(component);
                 show();
             }
@@ -98,18 +99,20 @@ public class WindowUtils {
                 dialog.dispose();
             }
 
+            @Nonnull
             @Override
             public Window getWindow() {
                 return dialog;
             }
 
+            @Nonnull
             @Override
             public Container getParent() {
                 return dialog.getParent();
             }
 
             @Override
-            public void center(Component component) {
+            public void center(@Nullable Component component) {
                 if (component == null) {
                     center();
                 } else {
@@ -124,6 +127,7 @@ public class WindowUtils {
         };
     }
 
+    @Nonnull
     public static JDialog createDialog(final JComponent component) {
         JDialog dialog = new JDialog();
         Dimension size = component.getPreferredSize();
@@ -147,6 +151,7 @@ public class WindowUtils {
      * @param component instantiated component
      * @return frame instance if found
      */
+    @Nullable
     public static Frame getFrame(Component component) {
         Window parentComponent = SwingUtilities.getWindowAncestor(component);
         while (!(parentComponent == null || parentComponent instanceof Frame)) {
@@ -158,14 +163,10 @@ public class WindowUtils {
         return (Frame) parentComponent;
     }
 
-    public static Window getWindow(Component component) {
-        return SwingUtilities.getWindowAncestor(component);
-    }
-
     /**
      * Assign ESCAPE/ENTER key for all focusable components recursively.
      *
-     * @param component target component
+     * @param component   target component
      * @param closeButton button which will be used for closing operation
      */
     public static void assignGlobalKeyListener(Component component, final JButton closeButton) {
@@ -242,21 +243,24 @@ public class WindowUtils {
         button.doClick(BUTTON_CLICK_TIME);
     }
 
+    @ParametersAreNonnullByDefault
     public interface DialogWrapper {
 
         void show();
 
-        void showCentered(Component window);
+        void showCentered(@Nullable Component window);
 
         void close();
 
         void dispose();
 
+        @Nonnull
         Window getWindow();
 
+        @Nonnull
         Container getParent();
 
-        void center(Component window);
+        void center(@Nullable Component window);
 
         void center();
     }

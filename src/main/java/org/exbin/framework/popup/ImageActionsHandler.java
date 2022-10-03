@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.utils.guipopup;
+package org.exbin.framework.popup;
 
-import org.openide.modules.ModuleInstall;
-import org.openide.windows.WindowManager;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Module installer.
+ * Interface for image handler for visual component / context menu.
  *
  * @author ExBin Project (http://exbin.org)
  */
-public class Installer extends ModuleInstall {
+@ParametersAreNonnullByDefault
+public interface ImageActionsHandler {
 
-    @Override
-    public void restored() {
-        WindowManager.getDefault().invokeWhenUIReady(() -> {
-            NetBeansPopupMenu.register();
-        });
-    }
+    /**
+     * Performs copy image to clipboard operation.
+     */
+    void performCopyImage();
+
+    /**
+     * Returns if true if image is selected.
+     *
+     * @return true if image is selected
+     */
+    boolean isImageSelected();
 }

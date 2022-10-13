@@ -49,7 +49,7 @@ import org.exbin.framework.popup.LinkActionsHandler;
 import org.exbin.framework.popup.PositionImageActionsHandler;
 import org.exbin.framework.popup.PositionLinkActionsHandler;
 import org.exbin.framework.utils.ActionUtils;
-import org.exbin.framework.utils.BareBonesBrowserLaunch;
+import org.exbin.framework.utils.DesktopUtils;
 import org.exbin.framework.utils.ClipboardActionsHandler;
 import org.exbin.framework.utils.ClipboardActionsUpdateListener;
 import org.exbin.framework.utils.ClipboardUtils;
@@ -158,7 +158,7 @@ public class EditorPanePopupHandler implements ClipboardActionsHandler, LinkActi
     @Override
     public void performOpenLink() {
         String url = EditorPanePopupHandler.getLinkUrl(editorPane, editorPane.getCaretPosition());
-        BareBonesBrowserLaunch.openDesktopURL(url);
+        DesktopUtils.openDesktopURL(url);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class EditorPanePopupHandler implements ClipboardActionsHandler, LinkActi
     public void performOpenLink(Point locationOnScreen) {
         SwingUtilities.convertPointFromScreen(locationOnScreen, editorPane);
         String url = EditorPanePopupHandler.getLinkUrl(editorPane, locationOnScreen);
-        BareBonesBrowserLaunch.openDesktopURL(url);
+        DesktopUtils.openDesktopURL(url);
     }
 
     @Override

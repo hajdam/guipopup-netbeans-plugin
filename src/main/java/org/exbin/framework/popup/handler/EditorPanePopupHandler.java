@@ -93,6 +93,7 @@ public class EditorPanePopupHandler implements ClipboardActionsHandler, LinkActi
 
     @Override
     public void performSelectAll() {
+        editorPane.requestFocusInWindow();
         editorPane.selectAll();
     }
 

@@ -89,7 +89,7 @@ public class ListPopupHandler implements ClipboardActionsHandler {
 
     @Override
     public boolean canSelectAll() {
-        return listComp.isEnabled() && listComp.getSelectionMode() != DefaultListSelectionModel.SINGLE_SELECTION;
+        return listComp.isEnabled() && listComp.getSelectionMode() != DefaultListSelectionModel.SINGLE_SELECTION && (listComp.getModel().getSize() > 0);
     }
 
     @Override

@@ -37,6 +37,7 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.JEditorPane;
 import javax.swing.JList;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
@@ -130,6 +131,88 @@ public class DefaultPopupMenu {
         DefaultPopupMenu defaultPopupMenu = getInstance();
         defaultPopupMenu.initDefaultPopupMenu(resourceBundle, resourceClass);
         defaultPopupMenu.registerToEventQueue();
+    }
+
+    public void appendTextMenu(JMenu menu, final TextActionsHandler handler) {
+        menu.add(createCopyTextMenuAction(handler));
+    }
+
+    public void appendTextMenu(JPopupMenu menu, final TextActionsHandler handler) {
+        menu.add(createCopyTextMenuAction(handler));
+    }
+
+    @Nonnull
+    public Action createCopyTextMenuAction(final TextActionsHandler handler) {
+        Class<? extends DefaultPopupMenu> resourceClass = DefaultPopupMenu.class;
+        Action copyImageMenuAction = new AbstractAction(POPUP_COPY_TEXT_ACTION_NAME) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handler.performCopyText();
+            }
+        };
+        ActionUtils.setupAction(copyImageMenuAction, resourceBundle, resourceClass, POPUP_COPY_TEXT_ACTION_ID);
+        copyImageMenuAction.setEnabled(handler.isTextSelected());
+        return copyImageMenuAction;
+    }
+
+    public void appendLinkMenu(JMenu menu, final LinkActionsHandler handler) {
+        menu.add(createCopyLinkMenuAction(handler));
+        menu.add(createOpenLinkMenuAction(handler));
+    }
+
+    public void appendLinkMenu(JPopupMenu menu, final LinkActionsHandler handler) {
+        menu.add(createCopyLinkMenuAction(handler));
+        menu.add(createOpenLinkMenuAction(handler));
+    }
+
+    @Nonnull
+    public Action createCopyLinkMenuAction(final LinkActionsHandler handler) {
+        Class<? extends DefaultPopupMenu> resourceClass = DefaultPopupMenu.class;
+        Action copyLinkMenuAction = new AbstractAction(POPUP_COPY_LINK_ACTION_NAME) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handler.performCopyLink();
+            }
+        };
+        ActionUtils.setupAction(copyLinkMenuAction, resourceBundle, resourceClass, POPUP_COPY_LINK_ACTION_ID);
+        copyLinkMenuAction.setEnabled(handler.isLinkSelected());
+        return copyLinkMenuAction;
+    }
+
+    @Nonnull
+    public Action createOpenLinkMenuAction(final LinkActionsHandler handler) {
+        Class<? extends DefaultPopupMenu> resourceClass = DefaultPopupMenu.class;
+        Action openLinkMenuAction = new DefaultPopupClipboardAction(POPUP_OPEN_LINK_ACTION_NAME) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handler.performOpenLink();
+            }
+        };
+        ActionUtils.setupAction(openLinkMenuAction, resourceBundle, resourceClass, POPUP_OPEN_LINK_ACTION_ID);
+        openLinkMenuAction.setEnabled(handler.isLinkSelected());
+        return openLinkMenuAction;
+    }
+
+    public void appendImageMenu(JMenu menu, final ImageActionsHandler handler) {
+        menu.add(createCopyImageMenuAction(handler));
+    }
+
+    public void appendImageMenu(JPopupMenu menu, final ImageActionsHandler handler) {
+        menu.add(createCopyImageMenuAction(handler));
+    }
+
+    @Nonnull
+    public Action createCopyImageMenuAction(final ImageActionsHandler handler) {
+        Class<? extends DefaultPopupMenu> resourceClass = DefaultPopupMenu.class;
+        Action copyImageMenuAction = new AbstractAction(POPUP_COPY_IMAGE_ACTION_NAME) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handler.performCopyImage();
+            }
+        };
+        ActionUtils.setupAction(copyImageMenuAction, resourceBundle, resourceClass, POPUP_COPY_IMAGE_ACTION_ID);
+        copyImageMenuAction.setEnabled(handler.isImageSelected());
+        return copyImageMenuAction;
     }
 
     private void registerToEventQueue() {

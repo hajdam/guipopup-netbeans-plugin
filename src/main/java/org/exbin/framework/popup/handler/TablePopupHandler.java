@@ -110,7 +110,7 @@ public class TablePopupHandler implements ClipboardActionsHandler {
 
     @Override
     public boolean canSelectAll() {
-        return tableComp.isEnabled() && tableComp.getSelectionModel().getSelectionMode() != ListSelectionModel.SINGLE_SELECTION;
+        return tableComp.isEnabled() && tableComp.getSelectionModel().getSelectionMode() != ListSelectionModel.SINGLE_SELECTION && (tableComp.getModel().getRowCount() > 0);
     }
 
     @Override

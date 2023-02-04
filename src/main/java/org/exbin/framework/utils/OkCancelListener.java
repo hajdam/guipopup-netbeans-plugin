@@ -15,31 +15,14 @@
  */
 package org.exbin.framework.utils;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 /**
- * Interface for popup event trigger dispatcher.
+ * Simple interface for ok and cancel event.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
-public interface ComponentPopupEventDispatcher {
+public interface OkCancelListener {
 
-    /**
-     * Processes event for popup trigger actions.
-     *
-     * @param mouseEvent mouse event
-     * @return true if event was processed
-     */
-    boolean dispatchMouseEvent(MouseEvent mouseEvent);
+    void okEvent();
 
-    /**
-     * Processes event for popup trigger actions.
-     *
-     * @param keyEvent key event
-     * @return true if event was processed
-     */
-    boolean dispatchKeyEvent(KeyEvent keyEvent);
+    void cancelEvent();
 }

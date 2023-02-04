@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,8 +18,7 @@ package org.exbin.utils.guipopup.gui;
 /**
  * Parameters list table item record.
  *
- * @version 0.1.0 2019/07/22
- * @author ExBin Project (http://exbin.org)
+ * @author ExBin Project (https://exbin.org)
  */
 public class PropertyTableItem {
 
@@ -56,11 +55,11 @@ public class PropertyTableItem {
     public void setValue(Object value) {
         this.value = value;
     }
-    
+
     public Object asBasicType() {
         if (value == null)
             return null;
-        
+
         if (value instanceof String) {
             return (String) value;
         } else if (value instanceof Integer) {
@@ -80,7 +79,7 @@ public class PropertyTableItem {
         } else if (value instanceof Short) {
             return Short.toString((Short) value);
         }
-        
+
         return value;
     }
 }

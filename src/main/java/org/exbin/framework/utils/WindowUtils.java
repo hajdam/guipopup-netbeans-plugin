@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,7 +26,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.awt.Container;
@@ -34,20 +33,25 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
+import javax.swing.AbstractAction;
+import javax.swing.KeyStroke;
+import javax.swing.text.JTextComponent;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 
 /**
  * Utility static methods usable for windows and dialogs.
  *
- * @author ExBin Project (http://exbin.org)
- * @version 0.1.0 2019/07/22
+ * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
 public final class WindowUtils {
+
+    public static final String ESC_CANCEL_KEY = "esc-cancel";
+    public static final String ENTER_OK_KEY = "enter-ok";
 
     private static final int BUTTON_CLICK_TIME = 150;
 
@@ -146,7 +150,7 @@ public final class WindowUtils {
     }
 
     /**
-     * Find frame component for given component.
+     * Finds frame component for given component.
      *
      * @param component instantiated component
      * @return frame instance if found
@@ -177,61 +181,81 @@ public final class WindowUtils {
      * Assign ESCAPE/ENTER key for all focusable components recursively.
      *
      * @param component target component
+     * @param okButton button which will be used for default ENTER
+     * @param cancelButton button which will be used for closing operation
      */
     public static void assignGlobalKeyListener(Component component, final JButton okButton, final JButton cancelButton) {
-        final KeyListener keyListener = new KeyListener() {
+        assignGlobalKeyListener(component, new OkCancelListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void okEvent() {
+                doButtonClick(okButton);
             }
 
             @Override
-            public void keyPressed(KeyEvent evt) {
-                if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-                    boolean performOkAction = true;
+            public void cancelEvent() {
+                doButtonClick(cancelButton);
+            }
+        });
+    }
 
-                    if (evt.getSource() instanceof JButton) {
-                        ((JButton) evt.getSource()).doClick(BUTTON_CLICK_TIME);
-                        performOkAction = false;
-                    } else if (evt.getSource() instanceof JTextArea) {
-                        performOkAction = !((JTextArea) evt.getSource()).isEditable();
-                    } else if (evt.getSource() instanceof JTextPane) {
-                        performOkAction = !((JTextPane) evt.getSource()).isEditable();
-                    } else if (evt.getSource() instanceof JEditorPane) {
-                        performOkAction = !((JEditorPane) evt.getSource()).isEditable();
-                    }
+    /**
+     * Assign ESCAPE/ENTER key for all focusable components recursively.
+     *
+     * @param component target component
+     * @param listener ok and cancel event listener
+     */
+    public static void assignGlobalKeyListener(Component component, @Nullable final OkCancelListener listener) {
+        JRootPane rootPane = SwingUtilities.getRootPane(component);
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), ESC_CANCEL_KEY);
+        rootPane.getActionMap().put(ESC_CANCEL_KEY, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                if (listener == null) {
+                    return;
+                }
 
-                    if (performOkAction) {
-                        doButtonClick(okButton);
-                    }
-                } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    boolean performCancelAction = true;
-                    if (evt.getSource() instanceof JComboBox) {
-                        performCancelAction = !((JComboBox) evt.getSource()).isPopupVisible();
-                    } else if (evt.getSource() instanceof JRootPane) {
+                boolean performCancelAction = true;
+
+                Window window = SwingUtilities.getWindowAncestor(event.getSource() instanceof JRootPane ? (JRootPane) event.getSource() : rootPane);
+                if (window != null) {
+                    Component focusOwner = window.getFocusOwner();
+                    if (focusOwner instanceof JComboBox) {
+                        performCancelAction = !((JComboBox) focusOwner).isPopupVisible();
+                    } else if (focusOwner instanceof JRootPane) {
                         // Ignore in popup menus
-                        performCancelAction = false;
-                    }
-
-                    if (performCancelAction) {
-                        doButtonClick(cancelButton);
+                        // performCancelAction = false;
                     }
                 }
-            }
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-        };
-
-        RecursiveLazyComponentListener componentListener = new RecursiveLazyComponentListener(new LazyComponentListener() {
-            @Override
-            public void componentCreated(Component component) {
-                if (component.isFocusable()) {
-                    component.addKeyListener(keyListener);
+                if (performCancelAction) {
+                    listener.cancelEvent();
                 }
             }
         });
-        componentListener.fireListener(component);
+
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), ENTER_OK_KEY);
+        rootPane.getActionMap().put(ENTER_OK_KEY, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                if (listener == null) {
+                    return;
+                }
+
+                boolean performOkAction = true;
+
+                Window window = SwingUtilities.getWindowAncestor(event.getSource() instanceof JRootPane ? (JRootPane) event.getSource() : rootPane);
+                if (window != null) {
+                    Component focusOwner = window.getFocusOwner();
+                    if (focusOwner instanceof JTextArea || focusOwner instanceof JEditorPane) {
+                        performOkAction = !((JTextComponent) focusOwner).isEditable();
+                    }
+                }
+
+                if (performOkAction) {
+                    listener.okEvent();
+                }
+            }
+        });
     }
 
     /**

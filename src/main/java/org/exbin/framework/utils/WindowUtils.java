@@ -136,7 +136,8 @@ public final class WindowUtils {
         JDialog dialog = new JDialog();
         Dimension size = component.getPreferredSize();
         dialog.add(component);
-        dialog.setSize(size.width + 8, size.height + 24);
+        dialog.getContentPane().setPreferredSize(new Dimension(size.width, size.height));
+        dialog.pack();
         return dialog;
     }
 

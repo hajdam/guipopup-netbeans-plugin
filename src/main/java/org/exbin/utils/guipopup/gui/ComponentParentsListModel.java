@@ -17,6 +17,8 @@ package org.exbin.utils.guipopup.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.AbstractListModel;
 
 /**
@@ -24,6 +26,7 @@ import javax.swing.AbstractListModel;
  *
  * @author ExBin Project (https://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class ComponentParentsListModel extends AbstractListModel<String> {
 
     private final List<RowRecord> items = new ArrayList<>();
@@ -42,6 +45,7 @@ public class ComponentParentsListModel extends AbstractListModel<String> {
         fireIntervalAdded(this, size, size);
     }
 
+    @Nonnull
     public Object getItemObject(int index) {
         return items.get(index).object;
     }
@@ -51,11 +55,13 @@ public class ComponentParentsListModel extends AbstractListModel<String> {
         return items.size();
     }
 
+    @Nonnull
     @Override
     public String getElementAt(int index) {
         return items.get(index).name;
     }
 
+    @ParametersAreNonnullByDefault
     private static class RowRecord {
 
         String name;

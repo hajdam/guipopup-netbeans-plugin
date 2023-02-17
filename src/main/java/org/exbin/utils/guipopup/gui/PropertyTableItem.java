@@ -15,23 +15,29 @@
  */
 package org.exbin.utils.guipopup.gui;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
  * Parameters list table item record.
  *
  * @author ExBin Project (https://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class PropertyTableItem {
 
     private String valueName;
     private String typeName;
     private Object value;
 
-    public PropertyTableItem(String valueName, String typeName, Object value) {
+    public PropertyTableItem(String valueName, String typeName, @Nullable Object value) {
         this.valueName = valueName;
         this.typeName = typeName;
         this.value = value;
     }
 
+    @Nonnull
     public String getValueName() {
         return valueName;
     }
@@ -40,6 +46,7 @@ public class PropertyTableItem {
         this.valueName = valueName;
     }
 
+    @Nonnull
     public String getTypeName() {
         return typeName;
     }
@@ -48,20 +55,27 @@ public class PropertyTableItem {
         this.typeName = typeName;
     }
 
+    @Nullable
     public Object getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(@Nullable Object value) {
         this.value = value;
     }
 
+    @Nullable
     public Object asBasicType() {
+        return convertToBasicType(value);
+    }
+
+    @Nullable
+    public static Object convertToBasicType(@Nullable Object value) {
         if (value == null)
             return null;
 
         if (value instanceof String) {
-            return (String) value;
+            return value;
         } else if (value instanceof Integer) {
             return Integer.toString((Integer) value);
         } else if (value instanceof Long) {

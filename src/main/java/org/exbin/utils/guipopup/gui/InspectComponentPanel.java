@@ -15,17 +15,20 @@
  */
 package org.exbin.utils.guipopup.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+
 import org.exbin.framework.utils.LanguageUtils;
 
 /**
- * Inspection panel for GUI component.
+ * Inspection panel for instance component.
  *
  * @author ExBin Project (https://exbin.org)
  */
@@ -47,22 +50,38 @@ public class InspectComponentPanel extends javax.swing.JPanel {
         this.component = component;
 
         componentClassTextField.setText(componentName == null ? "-" : componentName);
-        parentsList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int selectedIndex = parentsList.getSelectedIndex();
-                if (selectedIndex >= 0 && currentlyShown != selectedIndex) {
-                    currentlyShown = selectedIndex;
-                    Object itemObject = componentParentsListModel.getItemObject(currentlyShown);
-                    propertyTablePanel.setObject(itemObject);
-                }
+        parentsList.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            int selectedIndex = parentsList.getSelectedIndex();
+            if (selectedIndex >= 0 && currentlyShown != selectedIndex) {
+                currentlyShown = selectedIndex;
+                Object itemObject = componentParentsListModel.getItemObject(currentlyShown);
+                propertyTablePanel.setObject(itemObject);
             }
         });
 
         updateParentsList();
 
         propertyTablePanel.setObject(component);
-        splitPane.setBottomComponent(propertyTablePanel);
+        instanceSplitPane.setBottomComponent(propertyTablePanel);
+
+//        BinaryViewHandler binaryViewHandler = ViewBinaryDataProvider.getBinaryViewHandler();
+//        BinaryData binaryData = binaryViewHandler != null ? binaryViewHandler.instanceToBinaryData(component).orElse(null) : null;
+        Object basicType = PropertyTableItem.convertToBasicType(component);
+        if (basicType instanceof String) { //  || binaryData != null
+            JTabbedPane tabbedPane = new JTabbedPane();
+            tabbedPane.add("Instance", instanceSplitPane);
+            if (basicType instanceof String) {
+                JTextArea textArea = new JTextArea((String) basicType);
+                textArea.setEditable(false);
+                tabbedPane.add("Text", textArea);
+            }
+//            if (binaryData != null) {
+//                tabbedPane.add("Binary", binaryViewHandler.createBinaryViewPanel(binaryData));
+//            }
+            mainPanel.add(tabbedPane, BorderLayout.CENTER);
+        } else {
+            mainPanel.add(instanceSplitPane, BorderLayout.CENTER);
+        }
     }
 
     private void updateParentsList() {
@@ -101,21 +120,24 @@ public class InspectComponentPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        splitPane = new javax.swing.JSplitPane();
+        instanceSplitPane = new javax.swing.JSplitPane();
         parentsListScrollPane = new javax.swing.JScrollPane();
         parentsList = new javax.swing.JList<>();
+        mainPanel = new javax.swing.JPanel();
         componentLabel = new javax.swing.JLabel();
         componentClassTextField = new javax.swing.JTextField();
         closeButton = new javax.swing.JButton();
         showStaticFieldsCheckBox = new javax.swing.JCheckBox();
 
-        splitPane.setDividerLocation(230);
+        instanceSplitPane.setDividerLocation(230);
 
         parentsList.setModel(componentParentsListModel);
         parentsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         parentsListScrollPane.setViewportView(parentsList);
 
-        splitPane.setLeftComponent(parentsListScrollPane);
+        instanceSplitPane.setLeftComponent(parentsListScrollPane);
+
+        mainPanel.setLayout(new java.awt.BorderLayout());
 
         componentLabel.setText(resourceBundle.getString("componentLabel.text")); // NOI18N
 
@@ -137,14 +159,14 @@ public class InspectComponentPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 740, Short.MAX_VALUE)
+                    .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(componentLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(componentClassTextField))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(showStaticFieldsCheckBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 535, Short.MAX_VALUE)
                         .addComponent(closeButton)))
                 .addContainerGap())
         );
@@ -156,7 +178,7 @@ public class InspectComponentPanel extends javax.swing.JPanel {
                     .addComponent(componentLabel)
                     .addComponent(componentClassTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(closeButton)
@@ -176,10 +198,11 @@ public class InspectComponentPanel extends javax.swing.JPanel {
     private javax.swing.JButton closeButton;
     private javax.swing.JTextField componentClassTextField;
     private javax.swing.JLabel componentLabel;
+    private javax.swing.JSplitPane instanceSplitPane;
+    private javax.swing.JPanel mainPanel;
     private javax.swing.JList<String> parentsList;
     private javax.swing.JScrollPane parentsListScrollPane;
     private javax.swing.JCheckBox showStaticFieldsCheckBox;
-    private javax.swing.JSplitPane splitPane;
     // End of variables declaration//GEN-END:variables
 
     public void setCloseActionListener(ActionListener listener) {

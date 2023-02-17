@@ -18,7 +18,7 @@ package org.exbin.utils.guipopup.gui;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JComponent;
 import org.exbin.framework.utils.WindowUtils;
@@ -33,9 +33,10 @@ import org.openide.windows.WindowManager;
 public class PropertyTableCellPanel extends ComponentPropertyTableCellPanel {
 
     private final String name;
+    @Nullable
     private final Object value;
 
-    public PropertyTableCellPanel(JComponent cellComponent, Object value, String name) {
+    public PropertyTableCellPanel(JComponent cellComponent, @Nullable Object value, String name) {
         super(cellComponent);
 
         this.value = value;
@@ -43,7 +44,7 @@ public class PropertyTableCellPanel extends ComponentPropertyTableCellPanel {
         init();
     }
 
-    public PropertyTableCellPanel(Object value, String name) {
+    public PropertyTableCellPanel(@Nullable Object value, String name) {
         super();
 
         this.value = value;
@@ -52,21 +53,16 @@ public class PropertyTableCellPanel extends ComponentPropertyTableCellPanel {
     }
 
     private void init() {
-        setEditorAction(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                InspectComponentPanel inspectComponentPanel = new InspectComponentPanel();
-                inspectComponentPanel.setComponent(value, name);
-                Frame mainWindow = WindowManager.getDefault().getMainWindow();
-                final WindowUtils.DialogWrapper dialog = WindowUtils.createDialog(inspectComponentPanel, mainWindow, "Inspect Component", Dialog.ModalityType.MODELESS);
-                inspectComponentPanel.setCloseActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        dialog.close();
-                    }
-                });
-                dialog.show();
+        setEditorAction((ActionEvent e) -> {
+            if (value == null) {
+                return;
             }
+            InspectComponentPanel inspectComponentPanel = new InspectComponentPanel();
+            inspectComponentPanel.setComponent(value, name);
+            Frame mainWindow = WindowManager.getDefault().getMainWindow();
+            final WindowUtils.DialogWrapper dialog = WindowUtils.createDialog(inspectComponentPanel, mainWindow, "Inspect Component", Dialog.ModalityType.MODELESS);
+            inspectComponentPanel.setCloseActionListener(e1 -> dialog.close());
+            dialog.show();
         });
     }
 }

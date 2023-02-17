@@ -23,7 +23,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
-import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
@@ -31,7 +30,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -52,8 +50,6 @@ public final class WindowUtils {
 
     public static final String ESC_CANCEL_KEY = "esc-cancel";
     public static final String ENTER_OK_KEY = "enter-ok";
-
-    private static final int BUTTON_CLICK_TIME = 150;
 
     private WindowUtils() {
     }
@@ -151,24 +147,6 @@ public final class WindowUtils {
     }
 
     /**
-     * Finds frame component for given component.
-     *
-     * @param component instantiated component
-     * @return frame instance if found
-     */
-    @Nullable
-    public static Frame getFrame(Component component) {
-        Window parentComponent = SwingUtilities.getWindowAncestor(component);
-        while (!(parentComponent == null || parentComponent instanceof Frame)) {
-            parentComponent = SwingUtilities.getWindowAncestor(parentComponent);
-        }
-        if (parentComponent == null) {
-            parentComponent = JOptionPane.getRootFrame();
-        }
-        return (Frame) parentComponent;
-    }
-
-    /**
      * Assign ESCAPE/ENTER key for all focusable components recursively.
      *
      * @param component   target component
@@ -189,12 +167,12 @@ public final class WindowUtils {
         assignGlobalKeyListener(component, new OkCancelListener() {
             @Override
             public void okEvent() {
-                doButtonClick(okButton);
+                UiUtils.doButtonClick(okButton);
             }
 
             @Override
             public void cancelEvent() {
-                doButtonClick(cancelButton);
+                UiUtils.doButtonClick(cancelButton);
             }
         });
     }
@@ -257,15 +235,6 @@ public final class WindowUtils {
                 }
             }
         });
-    }
-
-    /**
-     * Performs visually visible click on the button component.
-     *
-     * @param button button component
-     */
-    public static void doButtonClick(JButton button) {
-        button.doClick(BUTTON_CLICK_TIME);
     }
 
     @ParametersAreNonnullByDefault

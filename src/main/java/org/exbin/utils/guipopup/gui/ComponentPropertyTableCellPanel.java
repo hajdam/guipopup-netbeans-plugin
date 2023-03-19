@@ -113,14 +113,13 @@ public class ComponentPropertyTableCellPanel extends javax.swing.JPanel {
 
     @Nonnull
     public static JLabel createEmptyCellComponent() {
-        JLabel label = new JLabel() {
+        return new JLabel() {
             @Override
             public void updateUI() {
                 super.updateUI();
                 setFont(UIManager.getDefaults().getFont("TextField.font"));
             }
         };
-        return label;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

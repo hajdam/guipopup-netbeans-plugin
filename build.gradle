@@ -212,9 +212,11 @@ dependencies {
     providedCompile netbeansApi('org-openide-modules')
     providedCompile netbeansApi('org-openide-util-ui')
     providedCompile netbeansApi('org-openide-windows')
+//    providedCompile 'org.exbin.bined.netbeans:bined-netbeans-plugin'
 
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     compileOnly 'com.bulenkov:darcula-2018.2'
+    providedCompile ':dependencies'
 
     testImplementation 'junit:junit:4.12'
     providedRuntime netbeansModule('org.netbeans.modules', 'org-netbeans-modules-projectapi-nb')

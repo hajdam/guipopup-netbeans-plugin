@@ -21,11 +21,14 @@ import java.awt.event.ActionListener;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 
+import org.exbin.bined.netbeans.api.BinaryViewHandler;
 import org.exbin.framework.utils.LanguageUtils;
+import org.openide.util.Lookup;
 
 /**
  * Inspection panel for instance component.
@@ -64,10 +67,23 @@ public class InspectComponentPanel extends javax.swing.JPanel {
         propertyTablePanel.setObject(component);
         instanceSplitPane.setBottomComponent(propertyTablePanel);
 
-//        BinaryViewHandler binaryViewHandler = ViewBinaryDataProvider.getBinaryViewHandler();
-//        BinaryData binaryData = binaryViewHandler != null ? binaryViewHandler.instanceToBinaryData(component).orElse(null) : null;
+        boolean binarySupported = false;
+        JComponent binaryComponent = null;
+        try {
+            BinaryViewHandler binaryViewHandler = Lookup.getDefault().lookup(BinaryViewHandler.class);
+            if (binaryViewHandler != null) {
+                Object binaryData = binaryViewHandler.instanceToBinaryData(component).orElse(null);
+                binaryComponent = binaryData != null ? binaryViewHandler.createBinaryViewPanel(binaryData).orElse(null) : null;
+                binarySupported = binaryComponent != null;
+            }
+        } catch (Throwable ex) {
+            // TODO: Throws NoClassDef even when BinEd plugin present
+            // cannot access BinEd plugin
+            binarySupported = false;
+        }
+
         Object basicType = PropertyTableItem.convertToBasicType(component);
-        if (basicType instanceof String) { //  || binaryData != null
+        if (basicType instanceof String || binarySupported) {
             JTabbedPane tabbedPane = new JTabbedPane();
             tabbedPane.add("Instance", instanceSplitPane);
             if (basicType instanceof String) {
@@ -75,9 +91,9 @@ public class InspectComponentPanel extends javax.swing.JPanel {
                 textArea.setEditable(false);
                 tabbedPane.add("Text", textArea);
             }
-//            if (binaryData != null) {
-//                tabbedPane.add("Binary", binaryViewHandler.createBinaryViewPanel(binaryData));
-//            }
+            if (binarySupported) {
+                tabbedPane.add("Binary", binaryComponent);
+            }
             mainPanel.add(tabbedPane, BorderLayout.CENTER);
         } else {
             mainPanel.add(instanceSplitPane, BorderLayout.CENTER);

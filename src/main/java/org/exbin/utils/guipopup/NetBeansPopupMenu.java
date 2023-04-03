@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.Action;
 import javax.swing.JEditorPane;
 import javax.swing.JList;
 import javax.swing.JTable;
@@ -52,6 +53,7 @@ import org.exbin.framework.utils.LanguageUtils;
 import org.exbin.framework.utils.WindowUtils;
 import org.exbin.utils.guipopup.gui.InspectComponentPanel;
 import org.openide.windows.WindowManager;
+import org.openide.util.ImageUtilities;
 
 /**
  * Default popup menu for NetBeans.
@@ -62,6 +64,7 @@ import org.openide.windows.WindowManager;
 public class NetBeansPopupMenu extends DefaultPopupMenu {
 
     private final ResourceBundle resourceBundle = LanguageUtils.getResourceBundleByClass(NetBeansPopupMenu.class);
+    public static final String ACTION_ICON_POSTFIX = ".netbeansIcon";
 
     private static NetBeansPopupMenu instance = null;
 
@@ -126,6 +129,10 @@ public class NetBeansPopupMenu extends DefaultPopupMenu {
 
     private void initDefaultPopupMenu() {
         initDefaultPopupMenu(resourceBundle, this.getClass());
+        defaultCutAction.putValue(Action.SMALL_ICON, ImageUtilities.loadImageIcon(resourceBundle.getString(POPUP_CUT_ACTION_ID + ACTION_ICON_POSTFIX), true));
+        defaultCopyAction.putValue(Action.SMALL_ICON, ImageUtilities.loadImageIcon(resourceBundle.getString(POPUP_COPY_ACTION_ID + ACTION_ICON_POSTFIX), true));
+        defaultPasteAction.putValue(Action.SMALL_ICON, ImageUtilities.loadImageIcon(resourceBundle.getString(POPUP_PASTE_ACTION_ID + ACTION_ICON_POSTFIX), true));
+        defaultDeleteAction.putValue(Action.SMALL_ICON, ImageUtilities.loadImageIcon(resourceBundle.getString(POPUP_DELETE_ACTION_ID + ACTION_ICON_POSTFIX), true));
     }
 
     // TODO extend org.netbeans.core.TimableEventQueue

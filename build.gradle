@@ -212,7 +212,10 @@ dependencies {
     providedCompile netbeansApi('org-openide-modules')
     providedCompile netbeansApi('org-openide-util-ui')
     providedCompile netbeansApi('org-openide-windows')
-//    providedCompile 'org.exbin.bined.netbeans:bined-netbeans-plugin'
+    // Optional dependency to bined netbeans plugin
+    // providedCompile (group: 'org.exbin.bined.netbeans', name: 'bined-netbeans-plugin', version: '0.2.4') {
+    //    exclude group: 'org.netbeans.api'
+    // }
 
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     compileOnly 'com.bulenkov:darcula-2018.2'

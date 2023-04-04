@@ -28,7 +28,7 @@ ext.scriptFile = { String fileName ->
     return new File(new File(rootDir, 'gradle'), fileName)
 }
 
-version = '0.1.2-SNAPSHOT'
+version = '0.1.2'
 group = 'org.exbin.utils.guipopup'
 
 sourceCompatibility = '1.8'
@@ -212,16 +212,16 @@ dependencies {
     providedCompile netbeansApi('org-openide-modules')
     providedCompile netbeansApi('org-openide-util-ui')
     providedCompile netbeansApi('org-openide-windows')
-    // Optional dependency to bined netbeans plugin
+    // Optional dependency to bined netbeans plugin, requires bined-netbeans-plugin.jar in lib
     // providedCompile (group: 'org.exbin.bined.netbeans', name: 'bined-netbeans-plugin', version: '0.2.4') {
     //    exclude group: 'org.netbeans.api'
     // }
 
-    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
     compileOnly 'com.bulenkov:darcula-2018.2'
     providedCompile ':dependencies'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
     providedRuntime netbeansModule('org.netbeans.modules', 'org-netbeans-modules-projectapi-nb')
 
     if (JavaVersion.current() != JavaVersion.VERSION_1_8) {

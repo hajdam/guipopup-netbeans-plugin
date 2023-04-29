@@ -1,6 +1,9 @@
+0.1.3
+- Added blacklist of components (issue #1 #2)
+
 0.1.2 (2023-04-04)
 - Support for copy link/image
-- Added integration with BinEd plugin (optional dependecy)
+- Added integration with BinEd plugin (optional dependency)
 
 0.1.1 (2020-04-25)
 - Build system changed to Gradle

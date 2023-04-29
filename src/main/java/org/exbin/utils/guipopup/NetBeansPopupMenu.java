@@ -30,6 +30,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,6 +69,10 @@ public class NetBeansPopupMenu extends DefaultPopupMenu {
     public static final String ACTION_ICON_POSTFIX = ".netbeansIcon";
 
     private static NetBeansPopupMenu instance = null;
+
+    private static final List<String> MOUSE_POPUP_COMPONENT_BLACKLIST = Arrays.asList(
+            "org.netbeans.modules.notifications.center.NotificationTable", "org.netbeans.modules.git.ui.commit.MessageArea", "org.netbeans.modules.team.commons.treelist.TreeList"
+    );
 
     private boolean registered = false;
     private boolean inspectMode = false;
@@ -181,6 +187,10 @@ public class NetBeansPopupMenu extends DefaultPopupMenu {
                 Component component = getSource(mouseEvent);
                 if (component instanceof JViewport) {
                     component = ((JViewport) component).getView();
+                }
+
+                if (component == null || MOUSE_POPUP_COMPONENT_BLACKLIST.contains(component.getClass().getCanonicalName())) {
+                    return;
                 }
 
                 if (component instanceof JEditorPane) {

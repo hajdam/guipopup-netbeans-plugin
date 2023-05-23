@@ -37,4 +37,4 @@ Build commands: "gradle build" and "gradle nbm"
 License
 -------
 
-Apache License, Version 2.0 - see LICENSE-2.0.txt
+Apache License, Version 2.0 - see LICENSE.txt

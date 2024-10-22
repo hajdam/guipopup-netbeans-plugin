@@ -38,7 +38,7 @@ public class RecursiveLazyComponentListener implements LazyComponentListener {
         fireListener(component);
     }
 
-    public void fireListener(Component component) {
+    protected void fireListener(Component component) {
         listener.componentCreated(component);
 
         if (component instanceof Container) {

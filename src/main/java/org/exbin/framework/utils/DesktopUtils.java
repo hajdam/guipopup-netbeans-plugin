@@ -31,18 +31,19 @@ import javax.swing.SwingUtilities;
 @ParametersAreNonnullByDefault
 public class DesktopUtils {
 
+    private static final String ERROR_MESSAGE = "Error attempting to launch web browser";
+    private static final String OS_NAME = "os.name";
+
     private DesktopUtils() {
     }
-
-    private static final String ERROR_MESSAGE = "Error attempting to launch web browser";
 
     @SuppressWarnings("unchecked")
     public static void openOsURL(String url) {
         // Inspired by "Bare Bones Browser Launch"
-        DesktopOs basicOs = detectBasicOs();
+        OsType basicOs = detectBasicOs();
         try {
             switch (basicOs) {
-                case MAC_OS:
+                case MACOSX:
                     Class fileMgr = Class.forName("com.apple.eio.FileManager");
                     Method openURL = fileMgr.getDeclaredMethod("openURL", new Class[]{String.class});
                     openURL.invoke(null, new Object[]{url});
@@ -127,22 +128,39 @@ public class DesktopUtils {
         });
     }
 
+    /**
+     * Detects basic operating system.
+     *
+     * @see sun.awt.OSInfo
+     * @return basic operating system type
+     */
     @Nonnull
-    public static DesktopOs detectBasicOs() {
-        String osName = System.getProperty("os.name");
-        if (osName.toLowerCase().startsWith("mac os")) {
-            return DesktopOs.MAC_OS;
-        }
-        if (osName.toLowerCase().startsWith("windows")) {
-            return DesktopOs.WINDOWS;
+    public static OsType detectBasicOs() {
+        String osName = System.getProperty(OS_NAME).toLowerCase();
+        if (osName.contains("os x")) {
+            return OsType.MACOSX;
         }
 
-        return DesktopOs.OTHER;
+        if (osName.contains("windows")) {
+            return OsType.WINDOWS;
+        }
+
+        if (osName.contains("linux")) {
+            return OsType.LINUX;
+        }
+
+        if (osName.contains("aix")) {
+            return OsType.AIX;
+        }
+
+        return OsType.UNKNOWN;
     }
 
-    public enum DesktopOs {
-        MAC_OS,
+    public enum OsType {
         WINDOWS,
-        OTHER
+        LINUX,
+        MACOSX,
+        AIX,
+        UNKNOWN
     }
 }

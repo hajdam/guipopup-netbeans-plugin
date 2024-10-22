@@ -28,7 +28,7 @@ ext.scriptFile = { String fileName ->
     return new File(new File(rootDir, 'gradle'), fileName)
 }
 
-version = '0.1.2'
+version = '0.1.3-SNAPSHOT'
 group = 'org.exbin.utils.guipopup'
 
 sourceCompatibility = '1.8'
@@ -71,7 +71,7 @@ compileJava.options.sourcepath = sourceSets.main.resources.sourceDirectories
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 def configureExec(task) {
-    task.main = mainClass
+    task.mainClass = mainClass
     task.classpath = sourceSets.main.runtimeClasspath
     if (hasProperty('appArgs')) {
         task.args appArgs
@@ -91,7 +91,7 @@ if (!gradle.startParameter.taskNames.any {it.endsWith("test")}) {
 }
 
 task testJar(type: Jar, dependsOn: testClasses) {
-    classifier "tests"
+    archiveClassifier = 'tests'
     if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
     	archiveBaseName = "test-${project.archivesBaseName}"
     } else {
@@ -124,7 +124,7 @@ javadoc {
 }
 
 task javadocJar (type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    archiveClassifier = 'javadoc'
     from javadoc.destinationDir
 }
 
@@ -138,7 +138,7 @@ jar.manifest {
 }
 
 task nbmFile (type: Jar, dependsOn: tasks.nbm) {
-    classifier = 'nbm'
+    archiveClassifier = 'nbm'
     from tasks.nbm.outputFile
 }
 
@@ -233,7 +233,7 @@ dependencies {
 
 task sourcesJar(type: Jar, dependsOn: classes, description: 'Creates a jar from the source files.') {
     duplicatesStrategy = 'exclude'
-    classifier = 'sources'
+    archiveClassifier = 'sources'
     from sourceSets.main.allSource
 }
 
@@ -273,13 +273,13 @@ publishing {
         maven(MavenPublication) {
             from components.java
             artifact sourcesJar {
-                classifier 'sources'
+                archiveClassifier = 'sources'
             }
             artifact (javadocJar) {
-                classifier 'javadoc'
+                classifier = 'javadoc'
             }
             artifact (nbmFile) {
-                classifier 'nbm'
+                classifier = 'nbm'
                 extension = 'nbm'
             }
 

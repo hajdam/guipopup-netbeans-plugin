@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.popup.handler;
+package org.exbin.framework.action.popup.handler;
 
 import java.awt.Image;
 import java.awt.Point;
@@ -44,10 +44,10 @@ import javax.swing.text.Position;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
-import org.exbin.framework.popup.ImageActionsHandler;
-import org.exbin.framework.popup.LinkActionsHandler;
-import org.exbin.framework.popup.PositionImageActionsHandler;
-import org.exbin.framework.popup.PositionLinkActionsHandler;
+import org.exbin.framework.action.popup.ImageActionsHandler;
+import org.exbin.framework.action.popup.LinkActionsHandler;
+import org.exbin.framework.action.popup.PositionImageActionsHandler;
+import org.exbin.framework.action.popup.PositionLinkActionsHandler;
 import org.exbin.framework.utils.ActionUtils;
 import org.exbin.framework.utils.DesktopUtils;
 import org.exbin.framework.utils.ClipboardActionsHandler;

@@ -28,17 +28,17 @@ import javax.swing.Action;
 public interface ClipboardActionsApi {
 
     @Nonnull
-    Action getCutAction();
+    Action createCutAction();
 
     @Nonnull
-    Action getCopyAction();
+    Action createCopyAction();
 
     @Nonnull
-    Action getPasteAction();
+    Action createPasteAction();
 
     @Nonnull
-    Action getDeleteAction();
+    Action createDeleteAction();
 
     @Nonnull
-    Action getSelectAllAction();
+    Action createSelectAllAction();
 }

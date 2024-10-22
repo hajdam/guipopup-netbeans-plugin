@@ -132,20 +132,6 @@ public class ActionUtils {
         }
     }
 
-    /**
-     * Invokes action of given name on text component.
-     *
-     * @param textComponent component
-     * @param actionName    action name
-     */
-    public static void invokeTextAction(JTextComponent textComponent, String actionName) {
-        ActionMap textActionMap = textComponent.getActionMap().getParent();
-        long eventTime = EventQueue.getMostRecentEventTime();
-        int eventMods = getCurrentEventModifiers();
-        ActionEvent actionEvent = new ActionEvent(textComponent, ActionEvent.ACTION_PERFORMED, actionName, eventTime, eventMods);
-        textActionMap.get(actionName).actionPerformed(actionEvent);
-    }
-
     @Nonnull
     public static JMenuItem actionToMenuItem(Action action) {
         return actionToMenuItem(action, null);
@@ -192,6 +178,8 @@ public class ActionUtils {
 
     /**
      * This method was lifted from JTextComponent.java.
+     *
+     * @return KeyEvent modifier mask
      */
     private static int getCurrentEventModifiers() {
         int modifiers = 0;
@@ -205,8 +193,19 @@ public class ActionUtils {
     }
 
     /**
-     * Enumeration of action types.
+     * Invokes action of given name on text component.
+     *
+     * @param textComponent component
+     * @param actionName action name
      */
+    public static void invokeTextAction(JTextComponent textComponent, String actionName) {
+        ActionMap textActionMap = textComponent.getActionMap().getParent();
+        long eventTime = EventQueue.getMostRecentEventTime();
+        int eventMods = getCurrentEventModifiers();
+        ActionEvent actionEvent = new ActionEvent(textComponent, ActionEvent.ACTION_PERFORMED, actionName, eventTime, eventMods);
+        textActionMap.get(actionName).actionPerformed(actionEvent);
+    }
+    
     public enum ActionType {
         /**
          * Single click / activation action.

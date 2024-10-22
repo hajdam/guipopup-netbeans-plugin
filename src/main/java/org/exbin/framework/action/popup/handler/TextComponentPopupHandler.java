@@ -13,82 +13,75 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.popup.handler;
+package org.exbin.framework.action.popup.handler;
 
-import java.awt.datatransfer.StringSelection;
-import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JList;
+import javax.swing.SwingUtilities;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.JTextComponent;
+import org.exbin.framework.utils.ActionUtils;
 import org.exbin.framework.utils.ClipboardActionsHandler;
 import org.exbin.framework.utils.ClipboardActionsUpdateListener;
-import org.exbin.framework.utils.ClipboardUtils;
 
 /**
- * Popup handler for JList.
+ * Popup handler for text component.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class ListPopupHandler implements ClipboardActionsHandler {
+public class TextComponentPopupHandler implements ClipboardActionsHandler {
 
-    private final JList<?> listComp;
+    private final JTextComponent txtComp;
 
-    public ListPopupHandler(JList<?> listComp) {
-        this.listComp = listComp;
+    public TextComponentPopupHandler(JTextComponent txtComp) {
+        this.txtComp = txtComp;
     }
 
     @Override
     public void performCut() {
-        throw new IllegalStateException();
+        txtComp.cut();
     }
 
     @Override
     public void performCopy() {
-        StringBuilder builder = new StringBuilder();
-        List<?> rows = listComp.getSelectedValuesList();
-        boolean empty = true;
-        for (Object row : rows) {
-            builder.append(empty ? row.toString() : System.getProperty("line.separator") + row);
-
-            if (empty) {
-                empty = false;
-            }
-        }
-
-        ClipboardUtils.getClipboard().setContents(new StringSelection(builder.toString()), null);
+        txtComp.copy();
     }
 
     @Override
     public void performPaste() {
-        throw new IllegalStateException();
+        txtComp.paste();
     }
 
     @Override
     public void performDelete() {
-        throw new IllegalStateException();
+        ActionUtils.invokeTextAction(txtComp, DefaultEditorKit.deleteNextCharAction);
     }
 
     @Override
     public void performSelectAll() {
-        if (listComp.getModel().getSize() > 0) {
-            listComp.setSelectionInterval(0, listComp.getModel().getSize() - 1);
-        }
+        SwingUtilities.invokeLater(() -> {
+            txtComp.requestFocus();
+            ActionUtils.invokeTextAction(txtComp, DefaultEditorKit.selectAllAction);
+            int docLength = txtComp.getDocument().getLength();
+            if (txtComp.getSelectionStart() > 0 || txtComp.getSelectionEnd() != docLength) {
+                txtComp.selectAll();
+            }
+        });
     }
 
     @Override
     public boolean isSelection() {
-        return listComp.isEnabled() && !listComp.isSelectionEmpty();
+        return txtComp.isEnabled() && txtComp.getSelectionStart() != txtComp.getSelectionEnd();
     }
 
     @Override
     public boolean isEditable() {
-        return false;
+        return txtComp.isEnabled() && txtComp.isEditable();
     }
 
     @Override
     public boolean canSelectAll() {
-        return listComp.isEnabled() && listComp.getSelectionMode() != DefaultListSelectionModel.SINGLE_SELECTION && (listComp.getModel().getSize() > 0);
+        return txtComp.isEnabled() && !txtComp.getText().isEmpty();
     }
 
     @Override

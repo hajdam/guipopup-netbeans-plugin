@@ -13,28 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.popup.handler;
+package org.exbin.framework.action.popup.handler;
 
 import java.awt.datatransfer.StringSelection;
+import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.JList;
 import org.exbin.framework.utils.ClipboardActionsHandler;
 import org.exbin.framework.utils.ClipboardActionsUpdateListener;
 import org.exbin.framework.utils.ClipboardUtils;
 
 /**
- * Popup handler for table.
+ * Popup handler for JList.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class TablePopupHandler implements ClipboardActionsHandler {
+public class ListPopupHandler implements ClipboardActionsHandler {
 
-    private final JTable tableComp;
+    private final JList<?> listComp;
 
-    public TablePopupHandler(JTable tableComp) {
-        this.tableComp = tableComp;
+    public ListPopupHandler(JList<?> listComp) {
+        this.listComp = listComp;
     }
 
     @Override
@@ -45,37 +46,13 @@ public class TablePopupHandler implements ClipboardActionsHandler {
     @Override
     public void performCopy() {
         StringBuilder builder = new StringBuilder();
-        int[] rows = tableComp.getSelectedRows();
-        int[] columns;
-        if (tableComp.getSelectionModel().getSelectionMode() == ListSelectionModel.SINGLE_SELECTION) {
-            columns = new int[tableComp.getColumnCount()];
-            for (int i = 0; i < tableComp.getColumnCount(); i++) {
-                columns[i] = i;
-            }
-        } else {
-            columns = tableComp.getSelectedColumns();
-        }
-
+        List<?> rows = listComp.getSelectedValuesList();
         boolean empty = true;
-        for (int rowIndex : rows) {
-            if (!empty) {
-                builder.append(System.getProperty("line.separator"));
-            } else {
+        for (Object row : rows) {
+            builder.append(empty ? row.toString() : System.getProperty("line.separator") + row);
+
+            if (empty) {
                 empty = false;
-            }
-
-            boolean columnEmpty = true;
-            for (int columnIndex : columns) {
-                if (!columnEmpty) {
-                    builder.append("\t");
-                } else {
-                    columnEmpty = false;
-                }
-
-                Object value = tableComp.getModel().getValueAt(rowIndex, columnIndex);
-                if (value != null) {
-                    builder.append(value.toString());
-                }
             }
         }
 
@@ -94,12 +71,14 @@ public class TablePopupHandler implements ClipboardActionsHandler {
 
     @Override
     public void performSelectAll() {
-        tableComp.selectAll();
+        if (listComp.getModel().getSize() > 0) {
+            listComp.setSelectionInterval(0, listComp.getModel().getSize() - 1);
+        }
     }
 
     @Override
     public boolean isSelection() {
-        return tableComp.isEnabled() && (tableComp.getSelectedColumn() >= 0 || tableComp.getSelectedRow() >= 0);
+        return listComp.isEnabled() && !listComp.isSelectionEmpty();
     }
 
     @Override
@@ -109,7 +88,7 @@ public class TablePopupHandler implements ClipboardActionsHandler {
 
     @Override
     public boolean canSelectAll() {
-        return tableComp.isEnabled() && tableComp.getSelectionModel().getSelectionMode() != ListSelectionModel.SINGLE_SELECTION && (tableComp.getModel().getRowCount() > 0);
+        return listComp.isEnabled() && listComp.getSelectionMode() != DefaultListSelectionModel.SINGLE_SELECTION && (listComp.getModel().getSize() > 0);
     }
 
     @Override
@@ -124,6 +103,6 @@ public class TablePopupHandler implements ClipboardActionsHandler {
 
     @Override
     public boolean canDelete() {
-        return false;
+        return true;
     }
 }

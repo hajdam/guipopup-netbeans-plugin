@@ -70,7 +70,7 @@ public class LanguageUtils {
     @Nonnull
     public static ResourceBundle getResourceBundleByClass(Class<?> targetClass) {
         if (languageClassLoader == null) {
-            return ResourceBundle.getBundle(getResourceBaseNameBundleByClass(targetClass));
+            return ResourceBundle.getBundle(getResourceBaseNameBundleByClass(targetClass), Locale.getDefault(), targetClass.getClassLoader());
         } else {
             return new LanguageResourceBundle(getResourceBaseNameBundleByClass(targetClass));
         }

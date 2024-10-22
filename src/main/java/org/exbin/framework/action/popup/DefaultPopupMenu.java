@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.popup;
+package org.exbin.framework.action.popup;
 
 import java.awt.AWTEvent;
 import java.awt.Component;
@@ -48,14 +48,15 @@ import javax.swing.TransferHandler;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
-import org.exbin.framework.popup.handler.EditorPanePopupHandler;
-import org.exbin.framework.popup.handler.ListPopupHandler;
-import org.exbin.framework.popup.handler.TablePopupHandler;
-import org.exbin.framework.popup.handler.TextComponentPopupHandler;
+import org.exbin.framework.action.popup.handler.EditorPanePopupHandler;
+import org.exbin.framework.action.popup.handler.ListPopupHandler;
+import org.exbin.framework.action.popup.handler.TablePopupHandler;
+import org.exbin.framework.action.popup.handler.TextComponentPopupHandler;
 import org.exbin.framework.utils.ActionUtils;
 import org.exbin.framework.utils.ClipboardActionsHandler;
 import org.exbin.framework.utils.ComponentPopupEventDispatcher;
 import org.exbin.framework.utils.LanguageUtils;
+import org.exbin.framework.utils.UiUtils;
 
 /**
  * Utilities for default menu generation.
@@ -598,7 +599,7 @@ public class DefaultPopupMenu {
     protected void showPopupMenu(Component component, Point point, ClipboardActionsHandler handler) {
         boolean editable = handler.isEditable();
 
-        JPopupMenu popupMenu = new JPopupMenu();
+        JPopupMenu popupMenu = UiUtils.createPopupMenu();
         popupMenu.setName("defaultPopupMenu");
 
         boolean hasExtra = false;

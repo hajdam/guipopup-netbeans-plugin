@@ -213,6 +213,7 @@ dependencies {
     providedCompile netbeansApi('org-openide-util-ui')
     providedCompile netbeansApi('org-openide-windows')
     // Optional dependency to bined netbeans plugin, requires bined-netbeans-plugin.jar in lib
+    // Manually modify Info/info.xml and META-INF/MANIFEST.MF in module jar file to use OpenIDE-Module-Recommends
     // providedCompile (group: 'org.exbin.bined.netbeans', name: 'bined-netbeans-plugin', version: '0.2.4') {
     //    exclude group: 'org.netbeans.api'
     // }

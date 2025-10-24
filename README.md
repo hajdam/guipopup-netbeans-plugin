@@ -1,6 +1,8 @@
 GUI Popup & Inspect - NetBeans Plugin
 =====================================
 
+![Downloads](https://img.shields.io/endpoint?url=https://openbeans.org/plugin-counter/api/17)
+
 Registers popup menu and inspect function for all regular components in IDE.
 
  - Use right click or Shift-F10 to show typical popup menu on various input boxes.

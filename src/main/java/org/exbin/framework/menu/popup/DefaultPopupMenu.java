@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.action.popup;
+package org.exbin.framework.menu.popup;
 
 import java.awt.AWTEvent;
 import java.awt.Component;
@@ -48,12 +48,12 @@ import javax.swing.TransferHandler;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
-import org.exbin.framework.action.popup.handler.EditorPanePopupHandler;
-import org.exbin.framework.action.popup.handler.ListPopupHandler;
-import org.exbin.framework.action.popup.handler.TablePopupHandler;
-import org.exbin.framework.action.popup.handler.TextComponentPopupHandler;
+import org.exbin.framework.action.api.clipboard.TextClipboardController;
+import org.exbin.framework.menu.popup.handler.EditorPanePopupHandler;
+import org.exbin.framework.menu.popup.handler.ListPopupHandler;
+import org.exbin.framework.menu.popup.handler.TablePopupHandler;
+import org.exbin.framework.menu.popup.handler.TextComponentPopupHandler;
 import org.exbin.framework.utils.ActionUtils;
-import org.exbin.framework.utils.ClipboardActionsHandler;
 import org.exbin.framework.utils.ComponentPopupEventDispatcher;
 import org.exbin.framework.utils.LanguageUtils;
 import org.exbin.framework.utils.UiUtils;
@@ -151,7 +151,7 @@ public class DefaultPopupMenu {
                 handler.performCopyText();
             }
         };
-        ActionUtils.setupAction(copyImageMenuAction, resourceBundle, resourceClass, POPUP_COPY_TEXT_ACTION_ID);
+        ActionUtils.initAction(copyImageMenuAction, resourceBundle, resourceClass, POPUP_COPY_TEXT_ACTION_ID);
         copyImageMenuAction.setEnabled(handler.isTextSelected());
         return copyImageMenuAction;
     }
@@ -175,7 +175,7 @@ public class DefaultPopupMenu {
                 handler.performCopyLink();
             }
         };
-        ActionUtils.setupAction(copyLinkMenuAction, resourceBundle, resourceClass, POPUP_COPY_LINK_ACTION_ID);
+        ActionUtils.initAction(copyLinkMenuAction, resourceBundle, resourceClass, POPUP_COPY_LINK_ACTION_ID);
         copyLinkMenuAction.setEnabled(handler.isLinkSelected());
         return copyLinkMenuAction;
     }
@@ -189,7 +189,7 @@ public class DefaultPopupMenu {
                 handler.performOpenLink();
             }
         };
-        ActionUtils.setupAction(openLinkMenuAction, resourceBundle, resourceClass, POPUP_OPEN_LINK_ACTION_ID);
+        ActionUtils.initAction(openLinkMenuAction, resourceBundle, resourceClass, POPUP_OPEN_LINK_ACTION_ID);
         openLinkMenuAction.setEnabled(handler.isLinkSelected());
         return openLinkMenuAction;
     }
@@ -211,7 +211,7 @@ public class DefaultPopupMenu {
                 handler.performCopyImage();
             }
         };
-        ActionUtils.setupAction(copyImageMenuAction, resourceBundle, resourceClass, POPUP_COPY_IMAGE_ACTION_ID);
+        ActionUtils.initAction(copyImageMenuAction, resourceBundle, resourceClass, POPUP_COPY_IMAGE_ACTION_ID);
         copyImageMenuAction.setEnabled(handler.isImageSelected());
         return copyImageMenuAction;
     }
@@ -233,12 +233,12 @@ public class DefaultPopupMenu {
             }
 
             @Override
-            public void updateFor(ClipboardActionsHandler clipboardHandler, @Nullable MouseEvent mouseEvent) {
+            public void updateFor(TextClipboardController clipboardHandler, @Nullable MouseEvent mouseEvent) {
                 super.updateFor(clipboardHandler, mouseEvent);
-                setEnabled(clipboardHandler.isEditable() && clipboardHandler.isSelection());
+                setEnabled(clipboardHandler.isEditable() && clipboardHandler.hasSelection());
             }
         };
-        ActionUtils.setupAction(defaultCutAction, resourceBundle, resourceClass, POPUP_CUT_ACTION_ID);
+        ActionUtils.initAction(defaultCutAction, resourceBundle, resourceClass, POPUP_CUT_ACTION_ID);
         defaultCutAction.putValue(Action.ACCELERATOR_KEY, javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, ActionUtils.getMetaMask()));
         defaultCutAction.setEnabled(false);
         defaultTextActionMap.put(TransferHandler.getCutAction().getValue(Action.NAME), defaultCutAction);
@@ -250,12 +250,12 @@ public class DefaultPopupMenu {
             }
 
             @Override
-            public void updateFor(ClipboardActionsHandler clipboardHandler, @Nullable MouseEvent mouseEvent) {
+            public void updateFor(TextClipboardController clipboardHandler, @Nullable MouseEvent mouseEvent) {
                 super.updateFor(clipboardHandler, mouseEvent);
-                setEnabled(clipboardHandler.isSelection());
+                setEnabled(clipboardHandler.hasSelection());
             }
         };
-        ActionUtils.setupAction(defaultCopyAction, resourceBundle, resourceClass, POPUP_COPY_ACTION_ID);
+        ActionUtils.initAction(defaultCopyAction, resourceBundle, resourceClass, POPUP_COPY_ACTION_ID);
         defaultCopyAction.putValue(Action.ACCELERATOR_KEY, javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, ActionUtils.getMetaMask()));
         defaultCopyAction.setEnabled(false);
         defaultTextActionMap.put(TransferHandler.getCopyAction().getValue(Action.NAME), defaultCopyAction);
@@ -267,12 +267,12 @@ public class DefaultPopupMenu {
             }
 
             @Override
-            public void updateFor(ClipboardActionsHandler clipboardHandler, @Nullable MouseEvent mouseEvent) {
+            public void updateFor(TextClipboardController clipboardHandler, @Nullable MouseEvent mouseEvent) {
                 super.updateFor(clipboardHandler, mouseEvent);
                 setEnabled(clipboardHandler.isEditable());
             }
         };
-        ActionUtils.setupAction(defaultPasteAction, resourceBundle, resourceClass, POPUP_PASTE_ACTION_ID);
+        ActionUtils.initAction(defaultPasteAction, resourceBundle, resourceClass, POPUP_PASTE_ACTION_ID);
         defaultPasteAction.putValue(Action.ACCELERATOR_KEY, javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, ActionUtils.getMetaMask()));
         defaultPasteAction.setEnabled(false);
         defaultTextActionMap.put(TransferHandler.getPasteAction().getValue(Action.NAME), defaultPasteAction);
@@ -284,12 +284,12 @@ public class DefaultPopupMenu {
             }
 
             @Override
-            public void updateFor(ClipboardActionsHandler clipboardHandler, @Nullable MouseEvent mouseEvent) {
+            public void updateFor(TextClipboardController clipboardHandler, @Nullable MouseEvent mouseEvent) {
                 super.updateFor(clipboardHandler, mouseEvent);
-                setEnabled(clipboardHandler.canDelete() && clipboardHandler.isSelection());
+                setEnabled(clipboardHandler.canDelete() && clipboardHandler.hasSelection());
             }
         };
-        ActionUtils.setupAction(defaultDeleteAction, resourceBundle, resourceClass, POPUP_DELETE_ACTION_ID);
+        ActionUtils.initAction(defaultDeleteAction, resourceBundle, resourceClass, POPUP_DELETE_ACTION_ID);
         defaultDeleteAction.putValue(Action.ACCELERATOR_KEY, javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, 0));
         defaultDeleteAction.setEnabled(false);
         defaultTextActionMap.put(DELETE_ACTION, defaultDeleteAction);
@@ -301,12 +301,12 @@ public class DefaultPopupMenu {
             }
 
             @Override
-            public void updateFor(ClipboardActionsHandler clipboardHandler, @Nullable MouseEvent mouseEvent) {
+            public void updateFor(TextClipboardController clipboardHandler, @Nullable MouseEvent mouseEvent) {
                 super.updateFor(clipboardHandler, mouseEvent);
                 setEnabled(clipboardHandler.canSelectAll());
             }
         };
-        ActionUtils.setupAction(defaultSelectAllAction, resourceBundle, resourceClass, POPUP_SELECT_ALL_ACTION_ID);
+        ActionUtils.initAction(defaultSelectAllAction, resourceBundle, resourceClass, POPUP_SELECT_ALL_ACTION_ID);
         defaultSelectAllAction.putValue(Action.ACCELERATOR_KEY, javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, ActionUtils.getMetaMask()));
         defaultTextActionMap.put(SELECT_ALL_ACTION, defaultSelectAllAction);
 
@@ -323,7 +323,7 @@ public class DefaultPopupMenu {
             }
 
             @Override
-            public void updateFor(ClipboardActionsHandler clipboardHandler, @Nullable MouseEvent mouseEvent) {
+            public void updateFor(TextClipboardController clipboardHandler, @Nullable MouseEvent mouseEvent) {
                 super.updateFor(clipboardHandler, mouseEvent);
                 boolean updateEnabled;
                 if (mouseEvent != null && clipboardHandler instanceof PositionTextActionsHandler) {
@@ -334,7 +334,7 @@ public class DefaultPopupMenu {
                 setEnabled(updateEnabled);
             }
         };
-        ActionUtils.setupAction(copyTextAction, resourceBundle, resourceClass, POPUP_COPY_TEXT_ACTION_ID);
+        ActionUtils.initAction(copyTextAction, resourceBundle, resourceClass, POPUP_COPY_TEXT_ACTION_ID);
         copyLinkAction = new DefaultPopupClipboardAction(POPUP_COPY_LINK_ACTION_NAME) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -346,7 +346,7 @@ public class DefaultPopupMenu {
             }
 
             @Override
-            public void updateFor(ClipboardActionsHandler clipboardHandler, @Nullable MouseEvent mouseEvent) {
+            public void updateFor(TextClipboardController clipboardHandler, @Nullable MouseEvent mouseEvent) {
                 super.updateFor(clipboardHandler, mouseEvent);
                 boolean updateEnabled;
                 if (mouseEvent != null && clipboardHandler instanceof PositionLinkActionsHandler) {
@@ -357,7 +357,7 @@ public class DefaultPopupMenu {
                 setEnabled(updateEnabled);
             }
         };
-        ActionUtils.setupAction(copyLinkAction, resourceBundle, resourceClass, POPUP_COPY_LINK_ACTION_ID);
+        ActionUtils.initAction(copyLinkAction, resourceBundle, resourceClass, POPUP_COPY_LINK_ACTION_ID);
         openLinkAction = new DefaultPopupClipboardAction(POPUP_OPEN_LINK_ACTION_NAME) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -369,7 +369,7 @@ public class DefaultPopupMenu {
             }
 
             @Override
-            public void updateFor(ClipboardActionsHandler clipboardHandler, @Nullable MouseEvent mouseEvent) {
+            public void updateFor(TextClipboardController clipboardHandler, @Nullable MouseEvent mouseEvent) {
                 super.updateFor(clipboardHandler, mouseEvent);
                 boolean updateEnabled;
                 if (mouseEvent != null && clipboardHandler instanceof PositionLinkActionsHandler) {
@@ -380,7 +380,7 @@ public class DefaultPopupMenu {
                 setEnabled(updateEnabled);
             }
         };
-        ActionUtils.setupAction(openLinkAction, resourceBundle, resourceClass, POPUP_OPEN_LINK_ACTION_ID);
+        ActionUtils.initAction(openLinkAction, resourceBundle, resourceClass, POPUP_OPEN_LINK_ACTION_ID);
         copyImageAction = new DefaultPopupClipboardAction(POPUP_COPY_IMAGE_ACTION_NAME) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -392,7 +392,7 @@ public class DefaultPopupMenu {
             }
 
             @Override
-            public void updateFor(ClipboardActionsHandler clipboardHandler, @Nullable MouseEvent mouseEvent) {
+            public void updateFor(TextClipboardController clipboardHandler, @Nullable MouseEvent mouseEvent) {
                 super.updateFor(clipboardHandler, mouseEvent);
                 boolean updateEnabled;
                 if (mouseEvent != null && clipboardHandler instanceof PositionImageActionsHandler) {
@@ -403,7 +403,7 @@ public class DefaultPopupMenu {
                 setEnabled(updateEnabled);
             }
         };
-        ActionUtils.setupAction(copyImageAction, resourceBundle, resourceClass, POPUP_COPY_IMAGE_ACTION_ID);
+        ActionUtils.initAction(copyImageAction, resourceBundle, resourceClass, POPUP_COPY_IMAGE_ACTION_ID);
     }
 
     public void fillDefaultPopupMenu(JPopupMenu popupMenu, int position) {
@@ -519,8 +519,9 @@ public class DefaultPopupMenu {
                 if (component instanceof JEditorPane) {
                     Point point;
                     try {
+                        @SuppressWarnings("deprecation")
                         Rectangle relativeRect = ((JEditorPane) component).modelToView(((JTextComponent) component).getCaretPosition());
-                        point = relativeRect == null ? null : new Point(relativeRect.x + relativeRect.width, relativeRect.y + relativeRect.height);
+                        point = relativeRect == null ? null : new Point((int) (relativeRect.getX() + relativeRect.getWidth()), (int) (relativeRect.getY() + relativeRect.getHeight()));
                     } catch (BadLocationException ex) {
                         point = null;
                     }
@@ -528,8 +529,9 @@ public class DefaultPopupMenu {
                 } else if (component instanceof JTextComponent) {
                     Point point;
                     try {
+                        @SuppressWarnings("deprecation")
                         Rectangle relativeRect = ((JTextComponent) component).modelToView(((JTextComponent) component).getCaretPosition());
-                        point = relativeRect == null ? null : new Point(relativeRect.x + relativeRect.width, relativeRect.y + relativeRect.height);
+                        point = relativeRect == null ? null : new Point((int) (relativeRect.getX() + relativeRect.getWidth()), (int) (relativeRect.getY() + relativeRect.getHeight()));
                     } catch (BadLocationException ex) {
                         point = null;
                     }
@@ -559,7 +561,7 @@ public class DefaultPopupMenu {
         }
     }
 
-    protected void activateMousePopup(MouseEvent mouseEvent, Component component, ClipboardActionsHandler clipboardHandler) {
+    protected void activateMousePopup(MouseEvent mouseEvent, Component component, TextClipboardController clipboardHandler) {
         for (DefaultPopupClipboardAction action : defaultTextActions) {
             action.updateFor(clipboardHandler, mouseEvent);
             copyTextAction.updateFor(clipboardHandler, mouseEvent);
@@ -575,7 +577,7 @@ public class DefaultPopupMenu {
         showPopupMenu(component, point, clipboardHandler);
     }
 
-    protected void activateKeyPopup(Component component, @Nullable Point point, ClipboardActionsHandler clipboardHandler) {
+    protected void activateKeyPopup(Component component, @Nullable Point point, TextClipboardController clipboardHandler) {
         for (DefaultPopupClipboardAction action : defaultTextActions) {
             action.updateFor(clipboardHandler, null);
             copyTextAction.updateFor(clipboardHandler, null);
@@ -596,7 +598,7 @@ public class DefaultPopupMenu {
         showPopupMenu(component, point, clipboardHandler);
     }
 
-    protected void showPopupMenu(Component component, Point point, ClipboardActionsHandler handler) {
+    protected void showPopupMenu(Component component, Point point, TextClipboardController handler) {
         boolean editable = handler.isEditable();
 
         JPopupMenu popupMenu = UiUtils.createPopupMenu();
@@ -605,7 +607,7 @@ public class DefaultPopupMenu {
         boolean hasExtra = false;
         if (handler instanceof TextActionsHandler) {
             if (copyTextAction.isEnabled()) {
-                JMenuItem copyTextMenuItem = new JMenuItem();
+                JMenuItem copyTextMenuItem = UiUtils.createMenuItem();
                 copyTextMenuItem.setAction(copyTextAction);
                 copyTextMenuItem.setName("basicCopyTextMenuItem");
                 popupMenu.add(copyTextMenuItem);
@@ -615,7 +617,7 @@ public class DefaultPopupMenu {
 
         if (handler instanceof ImageActionsHandler) {
             if (copyImageAction.isEnabled()) {
-                JMenuItem copyImageMenuItem = new JMenuItem();
+                JMenuItem copyImageMenuItem = UiUtils.createMenuItem();
                 copyImageMenuItem.setAction(copyImageAction);
                 copyImageMenuItem.setName("basicCopyImageMenuItem");
                 popupMenu.add(copyImageMenuItem);
@@ -625,7 +627,7 @@ public class DefaultPopupMenu {
 
         if (handler instanceof LinkActionsHandler) {
             if (openLinkAction.isEnabled()) {
-                JMenuItem openLinkMenuItem = new JMenuItem();
+                JMenuItem openLinkMenuItem = UiUtils.createMenuItem();
                 openLinkMenuItem.setAction(openLinkAction);
                 openLinkMenuItem.setName("basicOpenLinkMenuItem");
                 popupMenu.add(openLinkMenuItem);
@@ -633,7 +635,7 @@ public class DefaultPopupMenu {
             }
 
             if (copyLinkAction.isEnabled()) {
-                JMenuItem copyLinkMenuItem = new JMenuItem();
+                JMenuItem copyLinkMenuItem = UiUtils.createMenuItem();
                 copyLinkMenuItem.setAction(copyLinkAction);
                 copyLinkMenuItem.setName("basicCopyLinkMenuItem");
                 popupMenu.add(copyLinkMenuItem);
@@ -677,14 +679,14 @@ public class DefaultPopupMenu {
     @ParametersAreNonnullByDefault
     protected static abstract class DefaultPopupClipboardAction extends AbstractAction {
 
-        protected ClipboardActionsHandler clipboardHandler;
+        protected TextClipboardController clipboardHandler;
         protected MouseEvent mouseEvent;
 
         public DefaultPopupClipboardAction(String name) {
             super(name);
         }
 
-        public void updateFor(ClipboardActionsHandler clipboardHandler, @Nullable MouseEvent mouseEvent) {
+        public void updateFor(TextClipboardController clipboardHandler, @Nullable MouseEvent mouseEvent) {
             this.clipboardHandler = clipboardHandler;
             this.mouseEvent = mouseEvent;
         }

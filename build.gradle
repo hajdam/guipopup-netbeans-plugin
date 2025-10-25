@@ -91,10 +91,13 @@ if (!gradle.startParameter.taskNames.any {it.endsWith("test")}) {
 }
 
 task testJar(type: Jar, dependsOn: testClasses) {
-    archiveClassifier = 'tests'
     if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
-    	archiveBaseName = "test-${project.archivesBaseName}"
+        archiveClassifier = 'tests'
+        base {
+            archivesName = "test-${project.name}"
+        }
     } else {
+    	classifier = 'tests'
     	archiveName = "test-${project.archivesBaseName}"
     }
     from sourceSets.test.output
@@ -124,7 +127,12 @@ javadoc {
 }
 
 task javadocJar (type: Jar, dependsOn: javadoc) {
-    archiveClassifier = 'javadoc'
+    if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
+        archiveClassifier = 'javadoc'
+    } else {
+    	classifier = 'javadoc'
+    }
+        
     from javadoc.destinationDir
 }
 
@@ -138,8 +146,13 @@ jar.manifest {
 }
 
 task nbmFile (type: Jar, dependsOn: tasks.nbm) {
-    archiveClassifier = 'nbm'
-    from tasks.nbm.outputFile
+    if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
+        archiveClassifier = 'nbm'
+    } else {
+    	classifier = 'nbm'
+    }
+
+//    from tasks.nbm.outputFile
 }
 
 def packGZ(File jarToPack) {
@@ -233,8 +246,13 @@ dependencies {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes, description: 'Creates a jar from the source files.') {
+    if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
+        archiveClassifier = 'sources'
+    } else {
+    	classifier = 'sources'
+    }
+
     duplicatesStrategy = 'exclude'
-    archiveClassifier = 'sources'
     from sourceSets.main.allSource
 }
 
@@ -274,13 +292,25 @@ publishing {
         maven(MavenPublication) {
             from components.java
             artifact sourcesJar {
-                archiveClassifier = 'sources'
+                if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
+                    archiveClassifier = 'sources'
+                } else {
+                    classifier = 'sources'
+                }
             }
             artifact (javadocJar) {
-                classifier = 'javadoc'
+                if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
+                    archiveClassifier = 'javadoc'
+                } else {
+                    classifier = 'javadoc'
+                }
             }
             artifact (nbmFile) {
-                classifier = 'nbm'
+                if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
+                    archiveClassifier = 'nbm'
+                } else {
+                    classifier = 'nbm'
+                }
                 extension = 'nbm'
             }
 

@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.action.popup.handler;
+package org.exbin.framework.menu.popup.handler;
 
 import java.awt.datatransfer.StringSelection;
 import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JList;
-import org.exbin.framework.utils.ClipboardActionsHandler;
-import org.exbin.framework.utils.ClipboardActionsUpdateListener;
 import org.exbin.framework.utils.ClipboardUtils;
+import org.exbin.framework.action.api.clipboard.ClipboardStateListener;
+import org.exbin.framework.action.api.clipboard.TextClipboardController;
 
 /**
  * Popup handler for JList.
@@ -30,7 +30,7 @@ import org.exbin.framework.utils.ClipboardUtils;
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class ListPopupHandler implements ClipboardActionsHandler {
+public class ListPopupHandler implements TextClipboardController {
 
     private final JList<?> listComp;
 
@@ -77,8 +77,13 @@ public class ListPopupHandler implements ClipboardActionsHandler {
     }
 
     @Override
-    public boolean isSelection() {
+    public boolean hasSelection() {
         return listComp.isEnabled() && !listComp.isSelectionEmpty();
+    }
+
+    @Override
+    public boolean hasDataToCopy() {
+        return hasSelection();
     }
 
     @Override
@@ -92,7 +97,7 @@ public class ListPopupHandler implements ClipboardActionsHandler {
     }
 
     @Override
-    public void setUpdateListener(ClipboardActionsUpdateListener updateListener) {
+    public void setUpdateListener(ClipboardStateListener updateListener) {
         // Ignore
     }
 

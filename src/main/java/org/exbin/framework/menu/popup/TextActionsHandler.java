@@ -13,38 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.action.popup;
+package org.exbin.framework.menu.popup;
 
-import java.awt.Point;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Interface for link handler for visual component / context menu.
+ * Interface for text handler for visual component / context menu.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface PositionLinkActionsHandler {
+public interface TextActionsHandler {
 
     /**
-     * Performs copy link on given relative position to clipboard operation.
-     *
-     * @param locationOnScreen location on screen
+     * Performs copy text to clipboard operation.
      */
-    void performCopyLink(Point locationOnScreen);
+    void performCopyText();
 
     /**
-     * Opens link on given relative position using default browser.
+     * Returns if true if text is selected.
      *
-     * @param locationOnScreen location on screen
+     * @return true if text is selected
      */
-    void performOpenLink(Point locationOnScreen);
-
-    /**
-     * Returns if true if link is selected on given relative position.
-     *
-     * @param locationOnScreen location on screen
-     * @return true if link is selected
-     */
-    boolean isLinkSelected(Point locationOnScreen);
+    boolean isTextSelected();
 }

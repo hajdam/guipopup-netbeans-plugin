@@ -13,32 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.action.popup;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+package org.exbin.framework.action.api;
 
 /**
- * Interface for link handler for visual component / context menu.
+ * Interface for active document selection controller.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
-public interface LinkActionsHandler {
+public interface SelectionController {
 
     /**
-     * Performs copy link to clipboard operation.
+     * Performs select all operation. (should include focus request)
      */
-    void performCopyLink();
+    void performSelectAll();
 
     /**
-     * Opens link using default browser.
-     */
-    void performOpenLink();
-
-    /**
-     * Returns if true if link is selected.
+     * Returns if selection for clipboard operation is available.
      *
-     * @return true if link is selected
+     * @return true if selection is available
      */
-    boolean isLinkSelected();
+    boolean hasSelection();
+
+    /**
+     * Returns whether it is possible to execute select all operation.
+     *
+     * @return true if can perform select all
+     */
+    boolean canSelectAll();
 }

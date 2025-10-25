@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.action.popup.handler;
+package org.exbin.framework.menu.popup.handler;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import org.exbin.framework.utils.ActionUtils;
-import org.exbin.framework.utils.ClipboardActionsHandler;
-import org.exbin.framework.utils.ClipboardActionsUpdateListener;
+import org.exbin.framework.action.api.clipboard.ClipboardStateListener;
+import org.exbin.framework.action.api.clipboard.TextClipboardController;
 
 /**
  * Popup handler for text component.
@@ -29,7 +29,7 @@ import org.exbin.framework.utils.ClipboardActionsUpdateListener;
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class TextComponentPopupHandler implements ClipboardActionsHandler {
+public class TextComponentPopupHandler implements TextClipboardController {
 
     private final JTextComponent txtComp;
 
@@ -70,8 +70,13 @@ public class TextComponentPopupHandler implements ClipboardActionsHandler {
     }
 
     @Override
-    public boolean isSelection() {
+    public boolean hasSelection() {
         return txtComp.isEnabled() && txtComp.getSelectionStart() != txtComp.getSelectionEnd();
+    }
+
+    @Override
+    public boolean hasDataToCopy() {
+        return hasSelection();
     }
 
     @Override
@@ -85,7 +90,7 @@ public class TextComponentPopupHandler implements ClipboardActionsHandler {
     }
 
     @Override
-    public void setUpdateListener(ClipboardActionsUpdateListener updateListener) {
+    public void setUpdateListener(ClipboardStateListener updateListener) {
         // Ignore
     }
 

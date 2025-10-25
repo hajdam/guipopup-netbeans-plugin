@@ -13,31 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.action.popup;
+package org.exbin.framework.utils;
 
-import java.awt.Point;
-import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
+import javax.annotation.Nonnull;
+import javax.swing.JButton;
 
 /**
- * Interface for image handler for visual component / context menu.
+ * Simple interface for ok and cancel event invocation.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
-public interface PositionImageActionsHandler {
+public interface OkCancelControlComponent {
 
     /**
-     * Performs copy image on given relative position to clipboard operation.
-     *
-     * @param locationOnScreen location on screen
+     * Invokes OK event.
      */
-    void performCopyImage(Point locationOnScreen);
+    void invokeOkEvent();
 
     /**
-     * Returns if true if image is selected on given relative position.
-     *
-     * @param locationOnScreen location on screen
-     * @return true if image is selected
+     * Invokes cancel event.
      */
-    boolean isImageSelected(Point locationOnScreen);
+    void invokeCancelEvent();
+
+    /**
+     * Returns default button.
+     *
+     * @return default button
+     */
+    @Nonnull
+    Optional<JButton> getDefaultButton();
 }

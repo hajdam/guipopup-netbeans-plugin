@@ -13,31 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.action.popup;
+package org.exbin.framework.action.api;
 
-import java.awt.Point;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Interface for text handler for visual component / context menu.
+ * Enumeration of action types.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface PositionTextActionsHandler {
-
+public enum ActionType {
     /**
-     * Performs copy text on given relative position to clipboard operation.
-     *
-     * @param locationOnScreen location on screen
+     * Single click / activation action.
      */
-    void performCopyText(Point locationOnScreen);
-
+    PUSH,
     /**
-     * Returns if true if text is selected on given relative position.
-     *
-     * @param locationOnScreen location on screen
-     * @return true if image is selected
+     * Checkbox type action.
      */
-    boolean isTextSelected(Point locationOnScreen);
+    CHECK,
+    /**
+     * Radion type checking, where only one item in radio group can be checked.
+     */
+    RADIO,
+    /**
+     * Action to cycle thru list of options.
+     */
+    CYCLE;
 }

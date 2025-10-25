@@ -71,6 +71,7 @@ public class ClipboardUtils {
             this.image = image;
         }
 
+        @Nonnull
         @Override
         public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
             if (flavor.equals(DataFlavor.imageFlavor) && image != null) {

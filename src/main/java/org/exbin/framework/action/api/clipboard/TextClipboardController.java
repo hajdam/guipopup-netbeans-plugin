@@ -13,27 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.action.popup;
+package org.exbin.framework.action.api.clipboard;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import org.exbin.framework.action.api.DeletionController;
+import org.exbin.framework.action.api.SelectionController;
 
 /**
- * Interface for image handler for visual component / context menu.
+ * Interface for clipboard handler for visual component or document usable for
+ * context menu.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface ImageActionsHandler {
+public interface TextClipboardController extends ClipboardController, SelectionController, DeletionController {
 
     /**
-     * Performs copy image to clipboard operation.
-     */
-    void performCopyImage();
-
-    /**
-     * Returns if true if image is selected.
+     * Returns whether it is possible to change components data using clipboard
+     * operations.
      *
-     * @return true if image is selected
+     * @return true if component is editable
      */
-    boolean isImageSelected();
+    boolean isEditable();
+
+    /**
+     * Sets listener for clipboard actions related updates.
+     *
+     * @param updateListener update listener
+     */
+    void setUpdateListener(ClipboardStateListener updateListener);
 }

@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.action.popup.handler;
+package org.exbin.framework.menu.popup.handler;
 
 import java.awt.datatransfer.StringSelection;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import org.exbin.framework.utils.ClipboardActionsHandler;
-import org.exbin.framework.utils.ClipboardActionsUpdateListener;
 import org.exbin.framework.utils.ClipboardUtils;
+import org.exbin.framework.action.api.clipboard.ClipboardStateListener;
+import org.exbin.framework.action.api.clipboard.TextClipboardController;
 
 /**
  * Popup handler for table.
@@ -29,7 +29,7 @@ import org.exbin.framework.utils.ClipboardUtils;
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class TablePopupHandler implements ClipboardActionsHandler {
+public class TablePopupHandler implements TextClipboardController {
 
     private final JTable tableComp;
 
@@ -98,8 +98,13 @@ public class TablePopupHandler implements ClipboardActionsHandler {
     }
 
     @Override
-    public boolean isSelection() {
+    public boolean hasSelection() {
         return tableComp.isEnabled() && (tableComp.getSelectedColumn() >= 0 || tableComp.getSelectedRow() >= 0);
+    }
+
+    @Override
+    public boolean hasDataToCopy() {
+        return hasSelection();
     }
 
     @Override
@@ -113,7 +118,7 @@ public class TablePopupHandler implements ClipboardActionsHandler {
     }
 
     @Override
-    public void setUpdateListener(ClipboardActionsUpdateListener updateListener) {
+    public void setUpdateListener(ClipboardStateListener updateListener) {
         // Ignore
     }
 

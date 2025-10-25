@@ -13,16 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.utils;
+package org.exbin.framework.menu.popup;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Simple interface for ok and cancel event.
+ * Interface for link handler for visual component / context menu.
  *
  * @author ExBin Project (https://exbin.org)
  */
-public interface OkCancelListener {
+@ParametersAreNonnullByDefault
+public interface LinkActionsHandler {
 
-    void okEvent();
+    /**
+     * Performs copy link to clipboard operation.
+     */
+    void performCopyLink();
 
-    void cancelEvent();
+    /**
+     * Opens link using default browser.
+     */
+    void performOpenLink();
+
+    /**
+     * Returns if true if link is selected.
+     *
+     * @return true if link is selected
+     */
+    boolean isLinkSelected();
 }

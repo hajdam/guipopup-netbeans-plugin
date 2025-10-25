@@ -13,17 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.utils;
+package org.exbin.framework.action.api;
 
 /**
- * Clipboard actions update listener.
+ * Interface for active document deletion controller.
  *
  * @author ExBin Project (https://exbin.org)
  */
-public interface ClipboardActionsUpdateListener {
+public interface DeletionController {
 
     /**
-     * Notify about change in undo state.
+     * Performs delete selection operation.
      */
-    void stateChanged();
+    void performDelete();
+
+    /**
+     * Returns whether it is possible to perform delete.
+     *
+     * @return true, if delete operation is allowed.
+     */
+    boolean canDelete();
 }

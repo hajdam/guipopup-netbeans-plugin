@@ -13,27 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.utils;
+package org.exbin.framework.menu.popup;
 
+import java.awt.Point;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Interface for clipboard action set.
+ * Interface for text handler for visual component / context menu.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface ClipboardActionsUpdater extends ClipboardActionsApi {
+public interface PositionTextActionsHandler {
 
     /**
-     * Updates state of these actions according to clipboard handler.
-     */
-    void updateClipboardActions();
-
-    /**
-     * Sets clipboard handler.
+     * Performs copy text on given relative position to clipboard operation.
      *
-     * @param clipboardHandler clipboard handler
+     * @param locationOnScreen location on screen
      */
-    void setClipboardActionsHandler(ClipboardActionsHandler clipboardHandler);
+    void performCopyText(Point locationOnScreen);
+
+    /**
+     * Returns if true if text is selected on given relative position.
+     *
+     * @param locationOnScreen location on screen
+     * @return true if image is selected
+     */
+    boolean isTextSelected(Point locationOnScreen);
 }

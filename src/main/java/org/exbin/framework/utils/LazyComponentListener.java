@@ -26,5 +26,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public interface LazyComponentListener {
 
+    /**
+     * Notifies of component creation.
+     *
+     * @param component component instance
+     */
     void componentCreated(Component component);
 }

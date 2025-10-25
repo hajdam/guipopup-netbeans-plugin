@@ -13,29 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.utils;
+package org.exbin.framework.menu.popup;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Interface for panels creating lazy components.
+ * Interface for image handler for visual component / context menu.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface LazyComponentsIssuable {
+public interface ImageActionsHandler {
 
     /**
-     * Adds component child listener.
-     *
-     * @param listener listener
+     * Performs copy image to clipboard operation.
      */
-    void addChildComponentListener(LazyComponentListener listener);
+    void performCopyImage();
 
     /**
-     * Removes component child listener.
+     * Returns if true if image is selected.
      *
-     * @param listener listener
+     * @return true if image is selected
      */
-    void removeChildComponentListener(LazyComponentListener listener);
+    boolean isImageSelected();
 }

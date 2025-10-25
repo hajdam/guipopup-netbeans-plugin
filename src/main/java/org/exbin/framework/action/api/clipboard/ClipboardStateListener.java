@@ -13,29 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.utils;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+package org.exbin.framework.action.api.clipboard;
 
 /**
- * Interface for panels creating lazy components.
+ * Clipboard state listener.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
-public interface LazyComponentsIssuable {
+public interface ClipboardStateListener {
 
     /**
-     * Adds component child listener.
-     *
-     * @param listener listener
+     * Notify about change in clipboard state.
      */
-    void addChildComponentListener(LazyComponentListener listener);
-
-    /**
-     * Removes component child listener.
-     *
-     * @param listener listener
-     */
-    void removeChildComponentListener(LazyComponentListener listener);
+    void stateChanged();
 }

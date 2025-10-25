@@ -34,6 +34,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.util.Optional;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 import javax.swing.text.JTextComponent;
@@ -164,15 +165,21 @@ public final class WindowUtils {
      * @param cancelButton button which will be used for closing operation
      */
     public static void assignGlobalKeyListener(Component component, final JButton okButton, final JButton cancelButton) {
-        assignGlobalKeyListener(component, new OkCancelListener() {
+        assignGlobalKeyListener(component, new OkCancelControlComponent() {
             @Override
-            public void okEvent() {
+            public void invokeOkEvent() {
                 UiUtils.doButtonClick(okButton);
             }
 
             @Override
-            public void cancelEvent() {
+            public void invokeCancelEvent() {
                 UiUtils.doButtonClick(cancelButton);
+            }
+
+            @Nonnull
+            @Override
+            public Optional<JButton> getDefaultButton() {
+                return Optional.empty();
             }
         });
     }
@@ -183,7 +190,7 @@ public final class WindowUtils {
      * @param component target component
      * @param listener ok and cancel event listener
      */
-    public static void assignGlobalKeyListener(Component component, @Nullable final OkCancelListener listener) {
+    public static void assignGlobalKeyListener(Component component, @Nullable final OkCancelControlComponent listener) {
         JRootPane rootPane = SwingUtilities.getRootPane(component);
         rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), ESC_CANCEL_KEY);
         rootPane.getActionMap().put(ESC_CANCEL_KEY, new AbstractAction() {
@@ -207,7 +214,7 @@ public final class WindowUtils {
                 }
 
                 if (performCancelAction) {
-                    listener.cancelEvent();
+                    listener.invokeCancelEvent();
                 }
             }
         });
@@ -231,7 +238,7 @@ public final class WindowUtils {
                 }
 
                 if (performOkAction) {
-                    listener.okEvent();
+                    listener.invokeOkEvent();
                 }
             }
         });

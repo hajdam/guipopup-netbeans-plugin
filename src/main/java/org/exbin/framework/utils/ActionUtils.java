@@ -32,6 +32,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Map;
 import java.util.ResourceBundle;
+import org.exbin.framework.action.api.ActionType;
 
 /**
  * Some simple static methods usable for actions, menus and toolbars.
@@ -79,8 +80,8 @@ public class ActionUtils {
      * @param bundle   source bundle
      * @param actionId action identifier and bundle key prefix
      */
-    public static void setupAction(Action action, ResourceBundle bundle, String actionId) {
-        setupAction(action, bundle, action.getClass(), actionId);
+    public static void initAction(Action action, ResourceBundle bundle, String actionId) {
+        initAction(action, bundle, action.getClass(), actionId);
     }
 
     /**
@@ -91,7 +92,7 @@ public class ActionUtils {
      * @param resourceClass resourceClass
      * @param actionId      action identifier and bundle key prefix
      */
-    public static void setupAction(Action action, ResourceBundle bundle, Class<?> resourceClass, String actionId) {
+    public static void initAction(Action action, ResourceBundle bundle, Class<?> resourceClass, String actionId) {
         action.putValue(Action.NAME, bundle.getString(actionId + ACTION_NAME_POSTFIX));
         action.putValue(ACTION_ID, actionId);
 
@@ -140,7 +141,7 @@ public class ActionUtils {
     @Nonnull
     public static JMenuItem actionToMenuItem(Action action, @Nullable Map<String, ButtonGroup> buttonGroups) {
         JMenuItem menuItem;
-        ActionUtils.ActionType actionType = (ActionUtils.ActionType) action.getValue(ActionUtils.ACTION_TYPE);
+        ActionType actionType = (ActionType) action.getValue(ActionUtils.ACTION_TYPE);
         if (actionType != null) {
             switch (actionType) {
                 case CHECK: {
@@ -204,25 +205,5 @@ public class ActionUtils {
         int eventMods = getCurrentEventModifiers();
         ActionEvent actionEvent = new ActionEvent(textComponent, ActionEvent.ACTION_PERFORMED, actionName, eventTime, eventMods);
         textActionMap.get(actionName).actionPerformed(actionEvent);
-    }
-    
-    public enum ActionType {
-        /**
-         * Single click / activation action.
-         */
-        PUSH,
-        /**
-         * Checkbox type action.
-         */
-        CHECK,
-        /**
-         * Radion type checking, where only one item in radio group can be
-         * checked.
-         */
-        RADIO,
-        /**
-         * Action to cycle thru list of options.
-         */
-        CYCLE
     }
 }

@@ -37,6 +37,11 @@ public class DesktopUtils {
     private DesktopUtils() {
     }
 
+    /**
+     * Invokes URL link opening via system call.
+     *
+     * @param url link URL
+     */
     @SuppressWarnings("unchecked")
     public static void openOsURL(String url) {
         // Inspired by "Bare Bones Browser Launch"
@@ -72,6 +77,11 @@ public class DesktopUtils {
         }
     }
 
+    /**
+     * Invokes URL link opening via Desktop utility.
+     *
+     * @param url link URL
+     */
     public static void openDesktopURL(final String url) {
         SwingUtilities.invokeLater(() -> {
             if (Desktop.isDesktopSupported()) {
@@ -91,6 +101,11 @@ public class DesktopUtils {
         });
     }
 
+    /**
+     * Invokes URL link opening via Desktop utility.
+     *
+     * @param uri link URI
+     */
     public static void openDesktopURL(final URI uri) {
         SwingUtilities.invokeLater(() -> {
             if (Desktop.isDesktopSupported()) {
@@ -109,6 +124,11 @@ public class DesktopUtils {
         });
     }
 
+    /**
+     * Invokes URL link opening via Desktop utility.
+     *
+     * @param url link URL
+     */
     public static void openDesktopURL(final URL url) {
         SwingUtilities.invokeLater(() -> {
             if (Desktop.isDesktopSupported()) {

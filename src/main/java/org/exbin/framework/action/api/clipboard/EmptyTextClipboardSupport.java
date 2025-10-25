@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.utils;
+package org.exbin.framework.action.api.clipboard;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -24,7 +24,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class ClipboardActionsHandlerEmpty implements ClipboardActionsHandler {
+public class EmptyTextClipboardSupport implements TextClipboardController {
 
     @Override
     public void performCut() {
@@ -47,8 +47,13 @@ public class ClipboardActionsHandlerEmpty implements ClipboardActionsHandler {
     }
 
     @Override
-    public boolean isSelection() {
+    public boolean hasSelection() {
         return false;
+    }
+
+    @Override
+    public boolean hasDataToCopy() {
+        return hasSelection();
     }
 
     @Override
@@ -72,6 +77,6 @@ public class ClipboardActionsHandlerEmpty implements ClipboardActionsHandler {
     }
 
     @Override
-    public void setUpdateListener(ClipboardActionsUpdateListener updateListener) {
+    public void setUpdateListener(ClipboardStateListener updateListener) {
     }
 }

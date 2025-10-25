@@ -13,32 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.utils;
+package org.exbin.framework.menu.popup;
 
-import javax.annotation.Nonnull;
+import java.awt.Point;
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.Action;
 
 /**
- * Interface for clipboard editing actions.
+ * Interface for image handler for visual component / context menu.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface ClipboardActionsApi {
+public interface PositionImageActionsHandler {
 
-    @Nonnull
-    Action createCutAction();
+    /**
+     * Performs copy image on given relative position to clipboard operation.
+     *
+     * @param locationOnScreen location on screen
+     */
+    void performCopyImage(Point locationOnScreen);
 
-    @Nonnull
-    Action createCopyAction();
-
-    @Nonnull
-    Action createPasteAction();
-
-    @Nonnull
-    Action createDeleteAction();
-
-    @Nonnull
-    Action createSelectAllAction();
+    /**
+     * Returns if true if image is selected on given relative position.
+     *
+     * @param locationOnScreen location on screen
+     * @return true if image is selected
+     */
+    boolean isImageSelected(Point locationOnScreen);
 }

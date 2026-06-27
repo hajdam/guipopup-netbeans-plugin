@@ -231,7 +231,7 @@ dependencies {
     //    exclude group: 'org.netbeans.api'
     // }
 
-    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly 'org.jspecify:jspecify:1.0.0'
     compileOnly 'com.bulenkov:darcula-2018.2'
     providedCompile ':dependencies'
 

@@ -18,16 +18,16 @@ package org.exbin.utils.guipopup.gui;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import javax.swing.JComponent;
-import org.exbin.framework.utils.WindowUtils;
+import org.exbin.jaguif.utils.WindowUtils;
 import org.openide.windows.WindowManager;
 
 /**
  * Properties table cell panel.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class PropertyTableCellPanel extends ComponentPropertyTableCellPanel {
 
     private final String name;

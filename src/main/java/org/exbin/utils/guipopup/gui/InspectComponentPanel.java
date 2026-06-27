@@ -18,22 +18,21 @@ package org.exbin.utils.guipopup.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionListener;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 
 import org.exbin.bined.netbeans.api.BinaryViewHandler;
-import org.exbin.framework.utils.LanguageUtils;
+import org.exbin.jaguif.utils.LanguageUtils;
 import org.openide.util.Lookup;
 
 /**
  * Inspection panel for instance component.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class InspectComponentPanel extends javax.swing.JPanel {
 
     private final java.util.ResourceBundle resourceBundle = LanguageUtils.getResourceBundleByClass(InspectComponentPanel.class);
@@ -112,7 +111,6 @@ public class InspectComponentPanel extends javax.swing.JPanel {
         }
     }
 
-    @Nonnull
     private String getClassName(Class<?> clazz) {
         String name = clazz.getCanonicalName();
         if (name == null) {

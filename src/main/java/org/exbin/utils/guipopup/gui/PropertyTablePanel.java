@@ -18,8 +18,8 @@ package org.exbin.utils.guipopup.gui;
 import java.awt.Component;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -29,7 +29,7 @@ import javax.swing.table.TableColumnModel;
 /**
  * Panel for properties of the inspected instance.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class PropertyTablePanel extends javax.swing.JPanel {
 
     private final PropertyTableModel tableModel;

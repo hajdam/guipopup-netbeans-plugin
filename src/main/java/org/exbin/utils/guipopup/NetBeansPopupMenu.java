@@ -35,8 +35,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import javax.swing.Action;
 import javax.swing.JEditorPane;
 import javax.swing.JList;
@@ -45,14 +44,14 @@ import javax.swing.JViewport;
 import javax.swing.MenuSelectionManager;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
-import org.exbin.framework.menu.popup.DefaultPopupMenu;
-import org.exbin.framework.menu.popup.handler.EditorPanePopupHandler;
-import org.exbin.framework.menu.popup.handler.ListPopupHandler;
-import org.exbin.framework.menu.popup.handler.TablePopupHandler;
-import org.exbin.framework.menu.popup.handler.TextComponentPopupHandler;
-import org.exbin.framework.utils.ComponentPopupEventDispatcher;
-import org.exbin.framework.utils.LanguageUtils;
-import org.exbin.framework.utils.WindowUtils;
+import org.exbin.jaguif.menu.popup.DefaultPopupMenu;
+import org.exbin.jaguif.menu.popup.handler.EditorPanePopupHandler;
+import org.exbin.jaguif.menu.popup.handler.ListPopupHandler;
+import org.exbin.jaguif.menu.popup.handler.TablePopupHandler;
+import org.exbin.jaguif.menu.popup.handler.TextComponentPopupHandler;
+import org.exbin.jaguif.menu.popup.api.ComponentPopupEventDispatcher;
+import org.exbin.jaguif.utils.LanguageUtils;
+import org.exbin.jaguif.utils.WindowUtils;
 import org.exbin.utils.guipopup.gui.InspectComponentPanel;
 import org.openide.windows.WindowManager;
 import org.openide.util.ImageUtilities;
@@ -60,7 +59,7 @@ import org.openide.util.ImageUtilities;
 /**
  * Default popup menu for NetBeans.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class NetBeansPopupMenu extends DefaultPopupMenu {
 
     private final ResourceBundle resourceBundle = LanguageUtils.getResourceBundleByClass(NetBeansPopupMenu.class);
@@ -80,7 +79,6 @@ public class NetBeansPopupMenu extends DefaultPopupMenu {
     private NetBeansPopupMenu() {
     }
 
-    @Nonnull
     public static synchronized NetBeansPopupMenu getInstance() {
         if (instance == null) {
             instance = new NetBeansPopupMenu();
@@ -140,7 +138,7 @@ public class NetBeansPopupMenu extends DefaultPopupMenu {
     }
 
     // TODO extend org.netbeans.core.TimableEventQueue
-    @ParametersAreNonnullByDefault
+    @NullMarked
     public class PopupEventQueue extends EventQueue {
 
         @Override

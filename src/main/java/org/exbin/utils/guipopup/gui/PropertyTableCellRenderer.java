@@ -16,7 +16,7 @@
 package org.exbin.utils.guipopup.gui;
 
 import java.awt.Component;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -25,7 +25,7 @@ import javax.swing.table.TableCellRenderer;
 /**
  * Property Table Cell Renderer.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class PropertyTableCellRenderer implements TableCellRenderer {
 
     public PropertyTableCellRenderer() {
